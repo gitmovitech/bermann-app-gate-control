@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.IBinder;
+import android.util.Log;
+
 import cl.bermanngatecontrol.Libraries.SyncUtilities;
 import cl.bermanngatecontrol.SQLite.DbChoferesHelper;
 
@@ -31,15 +33,7 @@ public class SyncChoferes extends Service {
             public void run() {
                 while(true)
                 {
-
-                    DbChoferesHelper Choferes = new DbChoferesHelper(getApplicationContext());
-                    Cursor c = Choferes.getAll();
-                    if(c.getCount() == 0){
-                        timeSleep = 1000;
-                    }
-                    c.close();
-                    Choferes.close();
-
+                    Log.d("Sincronizando", "Choferes");
 
                     try {
                         Thread.sleep(timeSleep);
@@ -52,6 +46,7 @@ public class SyncChoferes extends Service {
                         Processing = 1;
                         if(sync_utilities.detectInternet()){
                             sync_utilities.getChoferes();
+                            Processing = 0;
                         }
                     }
 

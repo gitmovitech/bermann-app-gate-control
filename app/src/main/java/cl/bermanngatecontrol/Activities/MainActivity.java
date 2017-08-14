@@ -53,8 +53,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        /**
+         * SINCRONIZACION DE CHOFERES
+         */
         DbChoferesHelper Choferes = new DbChoferesHelper(this);
         Cursor c = Choferes.getAll();
+        final Intent intent = new Intent(this, SyncChoferes.class);
         if(c.getCount() == 0){
 
             sync_utilities = new SyncUtilities(this);
@@ -64,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void success() {
                         dialog.hide();
+                        startService(intent);
                     }
                 });
             } else {
@@ -81,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         } else {
-            Intent intent = new Intent(this, SyncChoferes.class);
             startService(intent);
         }
         c.close();
