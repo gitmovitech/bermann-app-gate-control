@@ -10,6 +10,15 @@ public class DbChoferesHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = DbChoferesProjection.Entry.TABLE_NAME+".db";
 
+    String[] projection = {
+        DbChoferesProjection.Entry.ID,
+                DbChoferesProjection.Entry.RUT,
+                DbChoferesProjection.Entry.NOMBRE,
+                DbChoferesProjection.Entry.APELLIDO_PATERNO,
+                DbChoferesProjection.Entry.ESTADO,
+                DbChoferesProjection.Entry.FOTO
+    };;
+
     public DbChoferesHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -44,15 +53,13 @@ public class DbChoferesHelper extends SQLiteOpenHelper {
 
     public Cursor getByRut(String rut){
         SQLiteDatabase db = getReadableDatabase();
-        String[] projection = {
-                DbChoferesProjection.Entry.ID,
-                DbChoferesProjection.Entry.RUT,
-                DbChoferesProjection.Entry.NOMBRE,
-                DbChoferesProjection.Entry.APELLIDO_PATERNO,
-                DbChoferesProjection.Entry.ESTADO,
-                DbChoferesProjection.Entry.FOTO
-        };
-        Cursor cursor = db.query(DbChoferesProjection.Entry.TABLE_NAME, projection, DbChoferesProjection.Entry.RUT+"=?", new String[]{String.valueOf(rut)}, null, null, null);
+        Cursor cursor = db.query(DbChoferesProjection.Entry.TABLE_NAME, projection, DbChoferesProjection.Entry.RUT+" = ?", new String[]{String.valueOf(rut)}, null, null, null);
+        return cursor;
+    }
+
+    public Cursor getAll(){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(DbChoferesProjection.Entry.TABLE_NAME, projection, null, null, null, null, null);
         return cursor;
     }
 }
