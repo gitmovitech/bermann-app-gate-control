@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cl.bermanngatecontrol.ResultActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_margin="6dp" >
+
+                <LinearLayout
+                    android:layout_margin="16dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_margin="10dp"
+                        android:src="@drawable/default_user_profile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+
+                    <!-- RUT CHOFER -->
+                    <TextView
+                        android:text="@string/txt_cid"
+                        android:textSize="18sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:text="15.299.723-K"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <ImageView
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/dotted"/>
+
+
+                    <!-- NOMBRES CHOFER -->
+                    <TextView
+                        android:text="@string/txt_firstname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textSize="18sp"
+                        android:text="Víctor Andrés"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+                    <ImageView
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/dotted"/>
+
+
+                    <!-- APELLIDOS CHOFER -->
+                    <TextView
+                        android:text="@string/txt_lastname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textSize="18sp"
+                        android:text="Vargas Oyarzo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <!--LISTADO REGISTROS -->
+
+            <ListView
+                android:layout_marginTop="30dp"
+                android:id="@+id/ListViewRegistros"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

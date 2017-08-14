@@ -1,6 +1,7 @@
 package cl.bermanngatecontrol;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,20 +15,27 @@ import com.google.zxing.integration.android.IntentResult;
 public class QrScannerActivity extends AppCompatActivity {
 
     IntentIntegrator integrator;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr_scanner);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
+        }
+
         integrator = new IntentIntegrator(this);
+        intent = new Intent(this, ResultActivity.class);
 
         Button btnQrScan = (Button) findViewById(R.id.btnQrScan);
         btnQrScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                integrator.setPrompt("Visualice el código QR de la credencial a través de esta cámara para iniciar el escaneo");
-                integrator.initiateScan();
+                startActivity(intent);
+                /*integrator.setPrompt("Visualice el código QR de la credencial a través de esta cámara para iniciar el escaneo");
+                integrator.initiateScan();*/
             }
         });
     }
