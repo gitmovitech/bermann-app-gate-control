@@ -1,4 +1,4 @@
-package cl.bermanngatecontrol;
+package cl.bermanngatecontrol.Activities;
 
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +8,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cl.bermanngatecontrol.R;
 
 public class ResultActivity extends AppCompatActivity {
 

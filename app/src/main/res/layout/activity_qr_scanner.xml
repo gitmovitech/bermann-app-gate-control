@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:padding="20dp"
     android:layout_gravity="center"
-    tools:context="cl.bermanngatecontrol.QrScannerActivity">
+    tools:context="cl.bermanngatecontrol.Activities.QrScannerActivity">
 
 
     <LinearLayout

@@ -1,4 +1,4 @@
-package cl.bermanngatecontrol;
+package cl.bermanngatecontrol.SQLite;
 
 
 import android.provider.BaseColumns;

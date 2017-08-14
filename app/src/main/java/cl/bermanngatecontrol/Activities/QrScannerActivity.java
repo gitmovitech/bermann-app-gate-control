@@ -1,4 +1,4 @@
-package cl.bermanngatecontrol;
+package cl.bermanngatecontrol.Activities;
 
 import android.content.Intent;
 import android.os.Build;
@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import cl.bermanngatecontrol.R;
 
 public class QrScannerActivity extends AppCompatActivity {
 
