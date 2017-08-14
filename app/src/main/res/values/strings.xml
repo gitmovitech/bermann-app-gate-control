@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">App Gate Control</string>
     <string name="txt_scan_message">Escanear credencial</string>
+    <string name="txt_scan_gate">Escanear punto de acceso</string>
     <string name="txt_cid">Número de documento</string>
     <string name="txt_firstname">Nombres</string>
     <string name="txt_lastname">Apellidos</string>
