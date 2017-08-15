@@ -1,7 +1,9 @@
 package cl.bermanngatecontrol.Activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Build;
 import android.support.v7.app.AlertDialog;
@@ -28,11 +30,14 @@ public class QrScannerActivity extends AppCompatActivity {
     IntentIntegrator integrator;
     Intent intent;
     String NombreGarita;
+    SharedPreferences config;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr_scanner);
+
+        config = getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
 
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -118,18 +123,36 @@ public class QrScannerActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.logout:
-                //@todo trabajar en logout
-                onBackPressed();
+                AlertDialog.Builder alert = new AlertDialog.Builder(QrScannerActivity.this);
+                alert.setTitle(getResources().getString(R.string.exit));
+                alert.setMessage(getResources().getString(R.string.exit_message_question));
+                alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        finish();
+
+                        SharedPreferences.Editor editData = config.edit();
+                        editData.putString(DbGaritasProjection.Entry.ID, "");
+                        editData.putString(DbGaritasProjection.Entry.NOMBRE, "");
+                        editData.putString(DbGaritasProjection.Entry.CLIENTE, "");
+                        editData.commit();
+
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                alert.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                alert.create();
+                alert.show();
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(R.anim.animation_enter, R.anim.animation_leave);
     }
 
 }

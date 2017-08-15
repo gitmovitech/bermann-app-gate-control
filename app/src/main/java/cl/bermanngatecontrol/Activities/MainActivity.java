@@ -5,8 +5,10 @@ import android.app.IntentService;
 import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.IBinder;
@@ -46,10 +48,23 @@ public class MainActivity extends AppCompatActivity {
     Intent intent;
     SyncUtilities sync_utilities;
     ProgressDialog dialog;
+    SharedPreferences config;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        intent = new Intent(this, QrScannerActivity.class);
+
+        config = getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
+        if(!config.getString(DbGaritasProjection.Entry.ID,"").isEmpty() && !config.getString(DbGaritasProjection.Entry.NOMBRE,"").isEmpty() && !config.getString(DbGaritasProjection.Entry.CLIENTE,"").isEmpty()){
+            intent.putExtra(DbGaritasProjection.Entry.ID, config.getString(DbGaritasProjection.Entry.ID,""));
+            intent.putExtra(DbGaritasProjection.Entry.NOMBRE, config.getString(DbGaritasProjection.Entry.NOMBRE,""));
+            intent.putExtra(DbGaritasProjection.Entry.CLIENTE, config.getString(DbGaritasProjection.Entry.CLIENTE,""));
+            startActivity(intent);
+            finish();
+        }
+
         setContentView(R.layout.activity_main);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -57,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         integrator = new IntentIntegrator(this);
-        intent = new Intent(this, QrScannerActivity.class);
+
 
         Button btnQrScan = (Button) findViewById(R.id.btnQrScan);
         btnQrScan.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +83,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         dialog = ProgressDialog.show(MainActivity.this, "", getResources().getString(R.string.syncing_first_time), false);
+        dialog.hide();
         SyncChoferes();
     }
 
@@ -85,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 Cursor c = Choferes.getAll();
                 final Intent intent = new Intent(getApplicationContext(), SyncChoferes.class);
                 if(c.getCount() == 0){
-
+                    dialog.show();
                     sync_utilities = new SyncUtilities(getApplicationContext());
                     if(sync_utilities.detectInternet()){
                         sync_utilities.getChoferesCallback(new CallbackSync(){
@@ -231,6 +248,13 @@ public class MainActivity extends AppCompatActivity {
                     try{
                         this.sleep(500);
                     } catch (Exception e){}
+
+                    SharedPreferences.Editor editData = config.edit();
+                    editData.putString(DbGaritasProjection.Entry.ID, intent.getStringExtra(DbGaritasProjection.Entry.ID));
+                    editData.putString(DbGaritasProjection.Entry.NOMBRE, intent.getStringExtra(DbGaritasProjection.Entry.NOMBRE));
+                    editData.putString(DbGaritasProjection.Entry.CLIENTE, intent.getStringExtra(DbGaritasProjection.Entry.CLIENTE));
+                    editData.commit();
+
                     startActivity(intent);
                     finish();
                 }

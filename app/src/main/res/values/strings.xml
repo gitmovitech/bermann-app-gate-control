@@ -13,7 +13,13 @@
         Si el problema persiste, puede que los servicios se encuentren desactivados. En este caso contáctenos para notificarnos sobre este problema.
     </string>
 
-    <string name="ok">Entendido</string>
+    <string name="exit_message_question">
+        ¿Salir de la Garita?
+    </string>
+
+    <string name="ok">Aceptar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="exit">Salir</string>
     <string name="error">Error</string>
     <string name="id_not_found">El número de documento no ha sido encontrado en la base de datos</string>
     <string name="garita_not_found">La Garita escaneada no existe</string>
