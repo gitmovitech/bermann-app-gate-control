@@ -12,11 +12,11 @@ public class DbChoferesHelper extends SQLiteOpenHelper {
 
     String[] projection = {
         DbChoferesProjection.Entry.ID,
-                DbChoferesProjection.Entry.RUT,
-                DbChoferesProjection.Entry.NOMBRE,
-                DbChoferesProjection.Entry.APELLIDO_PATERNO,
-                DbChoferesProjection.Entry.ESTADO,
-                DbChoferesProjection.Entry.FOTO
+        DbChoferesProjection.Entry.RUT,
+        DbChoferesProjection.Entry.NOMBRE,
+        DbChoferesProjection.Entry.APELLIDO_PATERNO,
+        DbChoferesProjection.Entry.ESTADO,
+        DbChoferesProjection.Entry.FOTO
     };;
 
     public DbChoferesHelper(Context context) {
@@ -53,7 +53,7 @@ public class DbChoferesHelper extends SQLiteOpenHelper {
 
     public Cursor getByRut(String rut){
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query(DbChoferesProjection.Entry.TABLE_NAME, projection, DbChoferesProjection.Entry.RUT+" = ?", new String[]{String.valueOf(rut)}, null, null, null);
+        Cursor cursor = db.query(DbChoferesProjection.Entry.TABLE_NAME, projection, DbChoferesProjection.Entry.RUT + " = ?", new String[]{ String.valueOf(rut) }, null, null, null);
         return cursor;
     }
 

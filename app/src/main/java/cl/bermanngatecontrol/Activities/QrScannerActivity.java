@@ -20,6 +20,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import cl.bermanngatecontrol.R;
 import cl.bermanngatecontrol.SQLite.DbChoferesHelper;
+import cl.bermanngatecontrol.SQLite.DbChoferesProjection;
 
 public class QrScannerActivity extends AppCompatActivity {
 
@@ -43,7 +44,6 @@ public class QrScannerActivity extends AppCompatActivity {
         btnQrScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //startActivity(intent);
                 integrator.setPrompt(getResources().getString(R.string.qr_credencial_scan_message));
                 integrator.initiateScan();
             }
@@ -61,8 +61,14 @@ public class QrScannerActivity extends AppCompatActivity {
                 DbChoferesHelper Choferes = new DbChoferesHelper(getApplicationContext());
                 Cursor c = Choferes.getByRut(qrcode);
                 if(c.getCount() > 0){
-
-
+                    c.moveToFirst();
+                    intent.putExtra(DbChoferesProjection.Entry.ID, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.ID)));
+                    intent.putExtra(DbChoferesProjection.Entry.NOMBRE, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.NOMBRE)));
+                    intent.putExtra(DbChoferesProjection.Entry.APELLIDO_PATERNO, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.APELLIDO_PATERNO)));
+                    intent.putExtra(DbChoferesProjection.Entry.RUT, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.RUT)));
+                    intent.putExtra(DbChoferesProjection.Entry.ESTADO, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.ESTADO)));
+                    intent.putExtra(DbChoferesProjection.Entry.FOTO, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.FOTO)));
+                    startActivity(intent);
 
                 } else {
                     AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -76,6 +82,8 @@ public class QrScannerActivity extends AppCompatActivity {
                     alert.create();
                     alert.show();
                 }
+                c.close();
+                Choferes.close();
 
             }
         } else {
