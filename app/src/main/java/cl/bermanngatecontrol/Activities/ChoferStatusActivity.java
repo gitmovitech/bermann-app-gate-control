@@ -30,6 +30,15 @@ public class ChoferStatusActivity extends AppCompatActivity {
         TextView txtRut = (TextView) findViewById(R.id.txtRut);
         Button btnDetalle = (Button) findViewById(R.id.btnDetalle);
 
+
+        btnDetalle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+
         String Estado = getIntent().getStringExtra(DbChoferesProjection.Entry.ESTADO);
         int Color = 0;
         if(Estado.equals("1")){
