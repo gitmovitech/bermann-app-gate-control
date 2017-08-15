@@ -17,6 +17,11 @@ public class SyncGaritas extends Service {
     Integer timeSleep = 1000*60*60;
 
     public SyncGaritas() {
+    }
+
+    @Override
+    public void onCreate() {
+
 
         context = getApplicationContext();
         sync_utilities = new SyncUtilities(context);
