@@ -24,6 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activities.ChoferStatusActivity">
+
+        </activity>
 
         <receiver
             android:name=".Services.BroadcastBootService"
@@ -41,7 +44,9 @@
         <service
             android:name=".Services.SyncGaritas"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
+
+
     </application>
 
 </manifest>

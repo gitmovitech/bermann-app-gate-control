@@ -24,6 +24,9 @@
 
     <string name="loading">Cargando, por favor espere...</string>
 
+    <string name="acceso_aprobado">Acceso aprobado</string>
+    <string name="acceso_rechazado">Acceso rechazado</string>
+
     <string name="url_choferes">https://ws.primeraruta.com/ws_recurso_php/RestController.php?accion=gettransportistas_choferes</string>
     <string name="url_garitas">https://ws.primeraruta.com/ws_recurso_php/RestController.php?accion=get_garitas</string>
 </resources>

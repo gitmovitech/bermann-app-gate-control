@@ -7,7 +7,6 @@ import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -41,7 +40,8 @@ public class QrScannerActivity extends AppCompatActivity {
         }
 
         integrator = new IntentIntegrator(this);
-        intent = new Intent(this, ResultActivity.class);
+        intent = new Intent(this, ChoferStatusActivity.class);
+        intent.putExtras(getIntent().getExtras());
 
         NombreGarita = getIntent().getStringExtra(DbGaritasProjection.Entry.NOMBRE);
         TextView txtNombreGarita = (TextView) findViewById(R.id.txtNombreGarita);
