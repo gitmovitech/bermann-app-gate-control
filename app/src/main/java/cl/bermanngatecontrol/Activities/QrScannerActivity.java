@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -21,11 +22,13 @@ import com.google.zxing.integration.android.IntentResult;
 import cl.bermanngatecontrol.R;
 import cl.bermanngatecontrol.SQLite.DbChoferesHelper;
 import cl.bermanngatecontrol.SQLite.DbChoferesProjection;
+import cl.bermanngatecontrol.SQLite.DbGaritasProjection;
 
 public class QrScannerActivity extends AppCompatActivity {
 
     IntentIntegrator integrator;
     Intent intent;
+    String NombreGarita;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,10 @@ public class QrScannerActivity extends AppCompatActivity {
 
         integrator = new IntentIntegrator(this);
         intent = new Intent(this, ResultActivity.class);
+
+        NombreGarita = getIntent().getStringExtra(DbGaritasProjection.Entry.NOMBRE);
+        TextView txtNombreGarita = (TextView) findViewById(R.id.txtNombreGarita);
+        txtNombreGarita.setText(NombreGarita);
 
         Button btnQrScan = (Button) findViewById(R.id.btnQrScan);
         btnQrScan.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +75,16 @@ public class QrScannerActivity extends AppCompatActivity {
                     intent.putExtra(DbChoferesProjection.Entry.RUT, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.RUT)));
                     intent.putExtra(DbChoferesProjection.Entry.ESTADO, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.ESTADO)));
                     intent.putExtra(DbChoferesProjection.Entry.FOTO, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.FOTO)));
-                    startActivity(intent);
+                    new Thread(){
+                        @Override
+                        public void run(){
+                            try{
+                                this.sleep(500);
+                            } catch (Exception e){}
+                            startActivity(intent);
+                            finish();
+                        }
+                    }.start();
 
                 } else {
                     AlertDialog.Builder alert = new AlertDialog.Builder(this);
