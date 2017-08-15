@@ -8,6 +8,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -27,22 +28,60 @@ public class RESTService {
     }
 
     /**
-     * Servicio GET
+     * Servicio GET JSON ARRAY
      * @param uri
      * @param jsonListener
      * @param errorListener
-     * @param cabeceras
      */
-    public void get(String uri, Response.Listener<JSONArray> jsonListener, Response.ErrorListener errorListener, final HashMap<String, String> cabeceras) {
-        //Log.d("URL SYNC", uri);
+    public void getJSONArray(String uri, Response.Listener<JSONArray> jsonListener, Response.ErrorListener errorListener) {
+        final HashMap<String, String> headers = new HashMap<>();
+        headers.put("accept", "application/json");
         JsonArrayRequest peticion = new JsonArrayRequest(uri,jsonListener,errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                return cabeceras;
+                return headers;
             }
         };
         VolleySingleton.getInstance(contexto).addToRequestQueue(peticion);
     }
+
+
+    /**
+     * Servicio GET JSON OBJECT
+     * @param uri
+     * @param jsonListener
+     * @param errorListener
+     */
+    public void getJSONObject(String uri, Response.Listener<JSONObject> jsonListener, Response.ErrorListener errorListener) {
+        final HashMap<String, String> headers = new HashMap<>();
+        headers.put("accept", "application/json");
+        JsonObjectRequest peticion = new JsonObjectRequest(uri,jsonListener,errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return headers;
+            }
+        };
+        VolleySingleton.getInstance(contexto).addToRequestQueue(peticion);
+    }
+
+    /**
+     * Servicio GET STRING
+     * @param uri
+     * @param listener
+     * @param errorListener
+     */
+    public void get(String uri, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        final HashMap<String, String> headers = new HashMap<>();
+        headers.put("accept", "application/json");
+        StringRequest peticion = new StringRequest(uri,listener,errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return headers;
+            }
+        };
+        VolleySingleton.getInstance(contexto).addToRequestQueue(peticion);
+    }
+
 
     /**
      * Servicio POST

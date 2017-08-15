@@ -15,7 +15,7 @@
         android:roundIcon="@drawable/bermanngps"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.QrScannerActivity"></activity>
+        <activity android:name=".Activities.QrScannerActivity" />
         <activity android:name=".Activities.ResultActivity" />
         <activity android:name=".Activities.MainActivity">
             <intent-filter>
@@ -37,8 +37,11 @@
         <service
             android:name=".Services.SyncChoferes"
             android:enabled="true"
-            android:exported="true"></service>
-
+            android:exported="true" />
+        <service
+            android:name=".Services.SyncGaritas"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

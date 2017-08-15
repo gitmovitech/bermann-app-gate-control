@@ -7,7 +7,7 @@ import android.os.IBinder;
 
 import cl.bermanngatecontrol.Libraries.SyncUtilities;
 
-public class SyncChoferes extends Service {
+public class SyncGaritas extends Service {
 
     Integer Processing = 0;
 
@@ -16,11 +16,7 @@ public class SyncChoferes extends Service {
     SyncUtilities sync_utilities;
     Integer timeSleep = 1000*60*60;
 
-    public SyncChoferes() {
-    }
-
-    @Override
-    public void onCreate() {
+    public SyncGaritas() {
 
         context = getApplicationContext();
         sync_utilities = new SyncUtilities(context);
@@ -41,7 +37,7 @@ public class SyncChoferes extends Service {
                     if (Processing == 0) {
                         Processing = 1;
                         if(sync_utilities.detectInternet()){
-                            sync_utilities.getChoferes();
+                            sync_utilities.getGaritas();
                             Processing = 0;
                         }
                     }
@@ -51,7 +47,6 @@ public class SyncChoferes extends Service {
 
             }
         }).start();
-
     }
 
     @Override
