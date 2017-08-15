@@ -19,6 +19,8 @@ import java.util.HashMap;
 import cl.bermanngatecontrol.R;
 import cl.bermanngatecontrol.SQLite.DbChoferesHelper;
 import cl.bermanngatecontrol.SQLite.DbChoferesProjection;
+import cl.bermanngatecontrol.SQLite.DbGaritasHelper;
+import cl.bermanngatecontrol.SQLite.DbGaritasProjection;
 
 public class SyncUtilities {
 
@@ -147,6 +149,8 @@ public class SyncUtilities {
      */
     public void getGaritasCallback(final CallbackSync cb){
 
+        //@todo Probar sincronizacion de garitas con callback
+
         url_garitas = context.getResources().getString(R.string.url_garitas);
         REST = new RESTService(context);
 
@@ -169,29 +173,29 @@ public class SyncUtilities {
      */
     public void setGaritasToDatabase(JSONArray data){
 
+        //@todo Probar guardado de garitas en base de datos
+
         JSONObject item;
         ContentValues values;
 
-        DbChoferesHelper Choferes = new DbChoferesHelper(context);
-        Choferes.deleteAll();
+        DbGaritasHelper Garitas = new DbGaritasHelper(context);
+        Garitas.deleteAll();
 
         for(int n = 0; n < data.length(); n++){
             try {
                 item = (JSONObject) data.get(n);
                 values = new ContentValues();
-                values.put(DbChoferesProjection.Entry.NOMBRE, item.getString("nombre"));
-                values.put(DbChoferesProjection.Entry.APELLIDO_PATERNO, item.getString("apellido_paterno"));
-                values.put(DbChoferesProjection.Entry.RUT, item.getString("rut"));
-                values.put(DbChoferesProjection.Entry.ESTADO, item.getString("estado"));
-                values.put(DbChoferesProjection.Entry.FOTO, item.getString("foto_chofer"));
-                Choferes.insert(values);
+                values.put(DbGaritasProjection.Entry.ID, item.getString("id"));
+                values.put(DbGaritasProjection.Entry.NOMBRE, item.getString("nombre"));
+                values.put(DbGaritasProjection.Entry.CLIENTE, item.getString("cliente"));
+                Garitas.insert(values);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
         }
 
-        Choferes.close();
+        Garitas.close();
     }
 
 
@@ -201,6 +205,7 @@ public class SyncUtilities {
      * @param cb
      */
     public void setGaritasToDatabase(JSONArray data, CallbackSync cb){
+        //@todo Probar guardado de garitas en base de datos con callback
         setChoferesToDatabase(data);
         cb.success();
     }
@@ -219,4 +224,5 @@ public class SyncUtilities {
             return false;
         }
     }
+
 }
