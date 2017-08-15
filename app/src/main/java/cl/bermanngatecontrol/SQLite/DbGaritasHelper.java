@@ -45,6 +45,12 @@ public class DbGaritasHelper extends SQLiteOpenHelper {
         db.insert(DbGaritasProjection.Entry.TABLE_NAME, null, values);
     }
 
+    public Cursor getById(String id){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(DbGaritasProjection.Entry.TABLE_NAME, projection, DbGaritasProjection.Entry.ID + " = ?", new String[]{ String.valueOf(id) }, null, null, null);
+        return cursor;
+    }
+
     public Cursor getAll(){
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(DbGaritasProjection.Entry.TABLE_NAME, projection, null, null, null, null, null);

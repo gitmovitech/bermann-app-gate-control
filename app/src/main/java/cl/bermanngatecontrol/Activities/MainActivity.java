@@ -212,10 +212,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * VALIDAR GARITA
+     * @param code
+     */
     protected void validateCode(String code){
-        //@todo Validar codigo QR de garita
-        startActivity(intent);
+        DbGaritasHelper Garitas = new DbGaritasHelper(getApplicationContext());
+        Cursor c = Garitas.getById(code);
+        if(c.getCount() > 0){
+            c.moveToFirst();
+            intent.putExtra(DbGaritasProjection.Entry.ID, c.getString(c.getColumnIndexOrThrow(DbGaritasProjection.Entry.ID)));
+            intent.putExtra(DbGaritasProjection.Entry.NOMBRE, c.getString(c.getColumnIndexOrThrow(DbGaritasProjection.Entry.NOMBRE)));
+            intent.putExtra(DbGaritasProjection.Entry.CLIENTE, c.getString(c.getColumnIndexOrThrow(DbGaritasProjection.Entry.CLIENTE)));
+            startActivity(intent);
+        } else {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setTitle(getResources().getString(R.string.error));
+            alert.setMessage(getResources().getString(R.string.garita_not_found));
+            alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            alert.create();
+            alert.show();
+        }
     }
 
 
