@@ -6,100 +6,110 @@
     android:layout_height="match_parent"
     tools:context="cl.bermanngatecontrol.Activities.ResultActivity">
 
-    <ScrollView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:background="@color/colorPrimary"
+            android:layout_height="200dp">
+
+            <ImageView
+                android:id="@+id/foto_chofer"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/default_user_profile" />
+
+            <LinearLayout
+                android:layout_toRightOf="@+id/foto_chofer"
+                android:id="@+id/llDetalle"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!-- RUT CHOFER -->
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:text="@string/txt_cid"
+                    android:textColor="@color/colorAccent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@id/txtRut"
+                    android:textStyle="bold"
+                    android:textSize="22sp"
+                    android:text="15299723-K"
+                    android:textColor="#FFF"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+
+                <!-- NOMBRES CHOFER -->
+                <TextView
+                    android:text="@string/txt_firstname"
+                    android:layout_width="match_parent"
+                    android:textColor="@color/colorAccent"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/txtNombres"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:text="Víctor Andrés"
+                    android:layout_width="match_parent"
+                    android:textColor="#FFF"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"/>
+
+
+
+                <!-- APELLIDOS CHOFER -->
+                <TextView
+                    android:text="@string/txt_lastname"
+                    android:layout_width="match_parent"
+                    android:textColor="@color/colorAccent"
+                    android:layout_height="wrap_content" />
+                <TextView
+
+                    android:id="@+id/txtApellidos"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:text="Vargas Oyarzo"
+                    android:textColor="#FFF"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
-            <android.support.v7.widget.CardView
+
+            <TextView
+                android:padding="10dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:text="Ultimos registros"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_margin="6dp" >
-
-                <LinearLayout
-                    android:layout_margin="16dp"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:layout_margin="10dp"
-                        android:src="@drawable/default_user_profile"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-
-                    <!-- RUT CHOFER -->
-                    <TextView
-                        android:text="@string/txt_cid"
-                        android:textSize="18sp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:textStyle="bold"
-                        android:textSize="20sp"
-                        android:text="15.299.723-K"
-                        android:textColor="@color/colorPrimary"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                    <ImageView
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:background="@drawable/dotted"/>
-
-
-                    <!-- NOMBRES CHOFER -->
-                    <TextView
-                        android:text="@string/txt_firstname"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:textSize="18sp"
-                        android:text="Víctor Andrés"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        />
-                    <ImageView
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:background="@drawable/dotted"/>
-
-
-                    <!-- APELLIDOS CHOFER -->
-                    <TextView
-                        android:text="@string/txt_lastname"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:textSize="18sp"
-                        android:text="Vargas Oyarzo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <!--LISTADO REGISTROS -->
+                android:layout_height="wrap_content" />
 
             <ListView
-                android:layout_marginTop="30dp"
                 android:id="@+id/ListViewRegistros"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"/>
+                android:layout_height="match_parent"/>
 
         </LinearLayout>
 
-    </ScrollView>
+    </LinearLayout>
+
 
 </RelativeLayout>

@@ -1,5 +1,6 @@
 package cl.bermanngatecontrol.Activities;
 
+import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import cl.bermanngatecontrol.SQLite.DbGaritasProjection;
 
 public class ChoferStatusActivity extends AppCompatActivity {
 
+    Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,11 +33,13 @@ public class ChoferStatusActivity extends AppCompatActivity {
         TextView txtRut = (TextView) findViewById(R.id.txtRut);
         Button btnDetalle = (Button) findViewById(R.id.btnDetalle);
 
+        intent = new Intent(this, ResultActivity.class);
+        intent.putExtras(getIntent().getExtras());
 
         btnDetalle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(intent);
             }
         });
 

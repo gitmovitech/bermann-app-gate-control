@@ -4,12 +4,13 @@ import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import cl.bermanngatecontrol.R;
+import cl.bermanngatecontrol.SQLite.DbChoferesProjection;
 
 public class ResultActivity extends AppCompatActivity {
 
@@ -25,6 +26,16 @@ public class ResultActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setElevation(0);
+
+        ImageView foto_chofer = (ImageView) findViewById(R.id.foto_chofer);
+        TextView txtRut = (TextView) findViewById(R.id.txtRut);
+        TextView txtNombres = (TextView) findViewById(R.id.txtNombres);
+        TextView txtApellidos = (TextView) findViewById(R.id.txtApellidos);
+
+        txtRut.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.RUT));
+        txtNombres.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.NOMBRE));
+        txtApellidos.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.APELLIDO_PATERNO));
 
         ListView Registros = (ListView) findViewById(R.id.ListViewRegistros);
         ArrayAdapter<String> Listado = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
@@ -33,6 +44,10 @@ public class ResultActivity extends AppCompatActivity {
         Listado.add("Registro 3");
         Listado.add("Registro 4");
         Listado.add("Registro 5");
+        Listado.add("Registro 6");
+        Listado.add("Registro 7");
+        Listado.add("Registro 8");
+        Listado.add("Registro 9");
         Registros.setAdapter(Listado);
     }
 
