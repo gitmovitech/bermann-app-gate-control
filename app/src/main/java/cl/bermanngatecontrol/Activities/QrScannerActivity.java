@@ -1,7 +1,10 @@
 package cl.bermanngatecontrol.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Build;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +19,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import cl.bermanngatecontrol.R;
+import cl.bermanngatecontrol.SQLite.DbChoferesHelper;
 
 public class QrScannerActivity extends AppCompatActivity {
 
@@ -40,7 +44,7 @@ public class QrScannerActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //startActivity(intent);
-                integrator.setPrompt("Visualice el código QR de la credencial a través de esta cámara para iniciar el escaneo");
+                integrator.setPrompt(getResources().getString(R.string.qr_credencial_scan_message));
                 integrator.initiateScan();
             }
         });
@@ -50,10 +54,29 @@ public class QrScannerActivity extends AppCompatActivity {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
             if(result.getContents() == null) {
-                Toast.makeText(this, "Ha cancelado el escaneo de código", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getResources().getString(R.string.qr_scan_cancel), Toast.LENGTH_LONG).show();
             } else {
                 String qrcode = result.getContents();
-                Log.d("QR", qrcode);
+
+                DbChoferesHelper Choferes = new DbChoferesHelper(getApplicationContext());
+                Cursor c = Choferes.getByRut(qrcode);
+                if(c.getCount() > 0){
+
+
+
+                } else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                    alert.setTitle(getResources().getString(R.string.error));
+                    alert.setMessage(getResources().getString(R.string.id_not_found));
+                    alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    alert.create();
+                    alert.show();
+                }
+
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
