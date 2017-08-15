@@ -9,8 +9,11 @@ public class BroadcastBootService extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Intent myIntent = new Intent(context, SyncChoferes.class);
-        context.startService(myIntent);
+        Intent IntentChoferes = new Intent(context, SyncChoferes.class);
+        context.startService(IntentChoferes);
+
+        Intent IntentGaritas = new Intent(context, SyncGaritas.class);
+        context.startService(IntentGaritas);
 
     }
 }
