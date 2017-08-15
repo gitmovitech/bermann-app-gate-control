@@ -224,7 +224,18 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(DbGaritasProjection.Entry.ID, c.getString(c.getColumnIndexOrThrow(DbGaritasProjection.Entry.ID)));
             intent.putExtra(DbGaritasProjection.Entry.NOMBRE, c.getString(c.getColumnIndexOrThrow(DbGaritasProjection.Entry.NOMBRE)));
             intent.putExtra(DbGaritasProjection.Entry.CLIENTE, c.getString(c.getColumnIndexOrThrow(DbGaritasProjection.Entry.CLIENTE)));
-            startActivity(intent);
+
+            new Thread(){
+                @Override
+                public void run(){
+                    try{
+                        this.sleep(500);
+                    } catch (Exception e){}
+                    startActivity(intent);
+                    finish();
+                }
+            }.start();
+
         } else {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setTitle(getResources().getString(R.string.error));
