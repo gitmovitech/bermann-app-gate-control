@@ -83,9 +83,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        dialog = ProgressDialog.show(MainActivity.this, "", getResources().getString(R.string.syncing_first_time), false);
-        dialog.hide();
         SyncChoferes();
     }
 
@@ -95,50 +92,41 @@ public class MainActivity extends AppCompatActivity {
      * SINCRONIZACION DE CHOFERES
      */
     protected void SyncChoferes(){
-        new Thread() {
-            @Override
-            public void run() {
-                DbChoferesHelper Choferes = new DbChoferesHelper(getApplicationContext());
-                Cursor c = Choferes.getAll();
-                final Intent intent = new Intent(getApplicationContext(), SyncChoferes.class);
-                if(c.getCount() == 0){
-                    dialog.show();
-                    sync_utilities = new SyncUtilities(getApplicationContext());
-                    if(sync_utilities.detectInternet()){
-                        sync_utilities.getChoferesCallback(new CallbackSync(){
-                            @Override
-                            public void success() {
-                                SyncGaritas();
-                            }
-                        });
-                    } else {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                dialog.hide();
-                            }
-                        });
-                        AlertDialog.Builder alert = new AlertDialog.Builder(getApplicationContext());
-                        alert.setTitle(getResources().getString(R.string.error));
-                        alert.setMessage(getResources().getString(R.string.connection_error_message));
-                        alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                                finish();
-                            }
-                        });
-                        alert.create();
-                        alert.show();
-                    }
+        DbChoferesHelper Choferes = new DbChoferesHelper(getApplicationContext());
+        Cursor c = Choferes.getAll();
+        final Intent intent = new Intent(getApplicationContext(), SyncChoferes.class);
+        if(c.getCount() == 0){
+            dialog = ProgressDialog.show(MainActivity.this, "", getResources().getString(R.string.syncing_first_time), false);
 
-                } else {
-                    startService(intent);
-                    SyncGaritas();
-                }
-                c.close();
-                Choferes.close();
+            sync_utilities = new SyncUtilities(getApplicationContext());
+            if(sync_utilities.detectInternet()){
+                sync_utilities.getChoferesCallback(new CallbackSync(){
+                    @Override
+                    public void success() {
+                        SyncGaritas();
+                    }
+                });
+            } else {
+                dialog.hide();
+                AlertDialog.Builder alert = new AlertDialog.Builder(getApplicationContext());
+                alert.setTitle(getResources().getString(R.string.error));
+                alert.setMessage(getResources().getString(R.string.connection_error_message));
+                alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        finish();
+                    }
+                });
+                alert.create();
+                alert.show();
             }
-        }.start();
+
+        } else {
+            startService(intent);
+            SyncGaritas();
+        }
+        c.close();
+        Choferes.close();
 
     }
 
@@ -148,30 +136,24 @@ public class MainActivity extends AppCompatActivity {
      * SINCRONIZACION DE GARITAS
      */
     protected void SyncGaritas(){
-        new Thread() {
-            @Override
-            public void run() {
-                DbGaritasHelper Garitas = new DbGaritasHelper(getApplicationContext());
-                Cursor c = Garitas.getAll();
-                final Intent intent = new Intent(getApplicationContext(), SyncGaritas.class);
-                if(c.getCount() == 0){
+        DbGaritasHelper Garitas = new DbGaritasHelper(getApplicationContext());
+        Cursor c = Garitas.getAll();
+        final Intent intent = new Intent(getApplicationContext(), SyncGaritas.class);
+        if(c.getCount() == 0){
 
-                    //PARA TEST INSERCION POR PRIMERA VEZ
-                    ContentValues values = new ContentValues();
-                    values.put(DbGaritasProjection.Entry.ID, "2");
-                    values.put(DbGaritasProjection.Entry.NOMBRE, "GARITA NORTE");
-                    values.put(DbGaritasProjection.Entry.CLIENTE, "1");
-                    Garitas.insert(values);
-                    startService(intent);
+            //PARA TEST INSERCION POR PRIMERA VEZ
+            ContentValues values = new ContentValues();
+            values.put(DbGaritasProjection.Entry.ID, "2");
+            values.put(DbGaritasProjection.Entry.NOMBRE, "GARITA NORTE");
+            values.put(DbGaritasProjection.Entry.CLIENTE, "1");
+            Garitas.insert(values);
+            startService(intent);
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            dialog.hide();
-                        }
-                    });
+            try{
+                dialog.hide();
+            } catch (Exception e){}
 
-                    //@todo Sincronizar garitas por primera vez
+            //@todo Sincronizar garitas por primera vez
             /*sync_utilities = new SyncUtilities(this);
             if(sync_utilities.detectInternet()){
                 final ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "", getResources().getString(R.string.syncing_first_time), false);
@@ -196,19 +178,15 @@ public class MainActivity extends AppCompatActivity {
                 alert.show();
             }*/
 
-                } else {
-                    startService(intent);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            dialog.hide();
-                        }
-                    });
-                }
-                c.close();
-                Garitas.close();
-            }
-        }.start();
+        } else {
+            startService(intent);
+            try{
+                dialog.hide();
+            } catch (Exception e){}
+
+        }
+        c.close();
+        Garitas.close();
 
     }
 

@@ -80,16 +80,7 @@ public class QrScannerActivity extends AppCompatActivity {
                     intent.putExtra(DbChoferesProjection.Entry.RUT, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.RUT)));
                     intent.putExtra(DbChoferesProjection.Entry.ESTADO, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.ESTADO)));
                     intent.putExtra(DbChoferesProjection.Entry.FOTO, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.FOTO)));
-                    new Thread(){
-                        @Override
-                        public void run(){
-                            try{
-                                this.sleep(500);
-                            } catch (Exception e){}
-                            startActivity(intent);
-                            finish();
-                        }
-                    }.start();
+                    startActivity(intent);
 
                 } else {
                     AlertDialog.Builder alert = new AlertDialog.Builder(this);
