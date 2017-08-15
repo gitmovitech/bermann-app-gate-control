@@ -6,11 +6,19 @@
     <string name="txt_firstname">Nombres</string>
     <string name="txt_lastname">Apellidos</string>
 
+    <string name="syncing_first_time">Sincronizando por primera vez, por favor espere...</string>
+    <string name="connection_error_message">
+        Ha habido un error de conexión al servidor.
+        Compruebe que posee una conexión a Internet activa.
+        Si el problema persiste, puede que los servicios se encuentren desactivados. En este caso contáctenos para notificarnos sobre este problema.
+    </string>
+
     <string name="ok">Entendido</string>
     <string name="error">Error</string>
     <string name="id_not_found">El número de documento no ha sido encontrado en la base de datos</string>
 
     <string name="qr_credencial_scan_message">Visualice el código QR de la credencial a través de esta cámara para iniciar el escaneo</string>
+    <string name="qr_garita_scan_message">Visualice el código QR de la garita a través de esta cámara para iniciar el escaneo</string>
     <string name="qr_scan_cancel">Ha cancelado el escaneo de código</string>
 
     <string name="url_choferes">https://ws.primeraruta.com/ws_recurso_php/RestController.php?accion=gettransportistas_choferes</string>

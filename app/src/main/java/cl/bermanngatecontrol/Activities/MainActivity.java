@@ -46,9 +46,8 @@ public class MainActivity extends AppCompatActivity {
         btnQrScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(intent);
-                /*integrator.setPrompt("Visualice el código QR de la credencial a través de esta cámara para iniciar el escaneo");
-                integrator.initiateScan();*/
+                integrator.setPrompt(getResources().getString(R.string.qr_garita_scan_message));
+                integrator.initiateScan();
             }
         });
 
@@ -63,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
             sync_utilities = new SyncUtilities(this);
             if(sync_utilities.detectInternet()){
-                final ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "", "Sincronizando por primera vez, por favor espere...", false);
+                final ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "", getResources().getString(R.string.syncing_first_time), false);
                 sync_utilities.getChoferesCallback(new CallbackSync(){
                     @Override
                     public void success() {
@@ -73,9 +72,9 @@ public class MainActivity extends AppCompatActivity {
                 });
             } else {
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                alert.setTitle("Error de conexión");
-                alert.setMessage("Ha habido un error de conexión al servidor.\n\nCompruebe que posee una conexión a Internet activa.\n\nSi el problema persiste, puede que los servicios se encuentren desactivados. En este caso contáctenos para notificarnos sobre este problema.");
-                alert.setPositiveButton("Entendido", new DialogInterface.OnClickListener() {
+                alert.setTitle(getResources().getString(R.string.error));
+                alert.setMessage(getResources().getString(R.string.connection_error_message));
+                alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
                         finish();
