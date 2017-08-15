@@ -17,7 +17,7 @@ public class SyncChoferes extends Service {
 
     Context context;
     SyncUtilities sync_utilities;
-    Integer timeSleep = 1000*60;
+    Integer timeSleep = 1000*60*60;
 
     public SyncChoferes() {
     }
@@ -33,7 +33,6 @@ public class SyncChoferes extends Service {
             public void run() {
                 while(true)
                 {
-                    Log.d("Sincronizando", "Choferes");
 
                     try {
                         Thread.sleep(timeSleep);

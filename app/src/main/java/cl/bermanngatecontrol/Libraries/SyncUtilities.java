@@ -39,7 +39,6 @@ public class SyncUtilities {
         headers.put("accept", "application/json");
         REST.get(url_choferes, new Response.Listener<JSONArray>() {
             public void onResponse(JSONArray response) {
-                Log.d("RESPONSE", response.toString());
                 setToDatabase(response);
             }
         }, new Response.ErrorListener() {
@@ -59,7 +58,6 @@ public class SyncUtilities {
         headers.put("accept", "application/json");
         REST.get(url_choferes, new Response.Listener<JSONArray>() {
             public void onResponse(JSONArray response) {
-                Log.d("RESPONSE", response.toString());
                 setToDatabase(response, cb);
             }
         }, new Response.ErrorListener() {

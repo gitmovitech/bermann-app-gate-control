@@ -39,9 +39,9 @@ public class QrScannerActivity extends AppCompatActivity {
         btnQrScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(intent);
-                /*integrator.setPrompt("Visualice el código QR de la credencial a través de esta cámara para iniciar el escaneo");
-                integrator.initiateScan();*/
+                //startActivity(intent);
+                integrator.setPrompt("Visualice el código QR de la credencial a través de esta cámara para iniciar el escaneo");
+                integrator.initiateScan();
             }
         });
     }
