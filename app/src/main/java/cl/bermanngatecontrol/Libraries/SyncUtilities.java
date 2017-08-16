@@ -207,6 +207,27 @@ public class SyncUtilities {
 
 
     /**
+     * ENVIA DATOS DEL DISPOSITIVO MOVIL
+     * @param url
+     */
+    public void setMobileDevice(String url){
+        REST = new RESTService(context);
+        Log.d("DEVICE", url);
+        REST.get(url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+    }
+
+
+    /**
      * DETECCIÓN DE CONEXIÓN A INTERNET
      * @return
      */

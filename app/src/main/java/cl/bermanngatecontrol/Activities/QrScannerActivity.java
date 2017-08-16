@@ -1,14 +1,19 @@
 package cl.bermanngatecontrol.Activities;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,6 +25,7 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import cl.bermanngatecontrol.Libraries.SyncUtilities;
 import cl.bermanngatecontrol.R;
 import cl.bermanngatecontrol.SQLite.DbChoferesHelper;
 import cl.bermanngatecontrol.SQLite.DbChoferesProjection;
@@ -31,6 +37,7 @@ public class QrScannerActivity extends AppCompatActivity {
     Intent intent;
     String NombreGarita;
     SharedPreferences config;
+    String uuid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +45,14 @@ public class QrScannerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_qr_scanner);
 
         config = getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
+
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
+        } else {
+            phoneStatePerms();
+        }
+
 
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -61,6 +76,36 @@ public class QrScannerActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void phoneStatePerms(){
+        TelephonyManager tManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        uuid = tManager.getDeviceId();
+        SyncUtilities sync_utilities = new SyncUtilities(this);
+        String url_set_mobile_device = getResources().getString(R.string.url_set_mobile_device);
+        url_set_mobile_device += "&nombre=" + uuid;
+        url_set_mobile_device += "&app=android";
+        url_set_mobile_device += "&version_app="+getResources().getString(R.string.version);
+        url_set_mobile_device += "&so="+Build.VERSION.RELEASE;
+        url_set_mobile_device += "&cliente="+getIntent().getStringExtra(DbGaritasProjection.Entry.CLIENTE);
+        url_set_mobile_device += "&garita="+getIntent().getStringExtra(DbGaritasProjection.Entry.NOMBRE);
+        sync_utilities.setMobileDevice(url_set_mobile_device);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    phoneStatePerms();
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);

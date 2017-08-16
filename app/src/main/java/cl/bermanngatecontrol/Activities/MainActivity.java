@@ -1,42 +1,27 @@
 package cl.bermanngatecontrol.Activities;
 
-import android.app.Activity;
-import android.app.IntentService;
 import android.app.ProgressDialog;
-import android.app.Service;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Build;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.HashMap;
 
 import cl.bermanngatecontrol.Libraries.CallbackSync;
-import cl.bermanngatecontrol.Libraries.RESTService;
 import cl.bermanngatecontrol.Libraries.SyncUtilities;
 import cl.bermanngatecontrol.R;
 import cl.bermanngatecontrol.SQLite.DbChoferesHelper;
-import cl.bermanngatecontrol.SQLite.DbChoferesProjection;
 import cl.bermanngatecontrol.SQLite.DbGaritasHelper;
 import cl.bermanngatecontrol.SQLite.DbGaritasProjection;
 import cl.bermanngatecontrol.Services.SyncChoferes;
@@ -57,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(this, QrScannerActivity.class);
 
         config = getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
-        if(!config.getString(DbGaritasProjection.Entry.ID,"").isEmpty() && !config.getString(DbGaritasProjection.Entry.NOMBRE,"").isEmpty() && !config.getString(DbGaritasProjection.Entry.CLIENTE,"").isEmpty()){
+        if(!config.getString(DbGaritasProjection.Entry.ID,"").isEmpty()
+                && !config.getString(DbGaritasProjection.Entry.NOMBRE,"").isEmpty()
+                && !config.getString(DbGaritasProjection.Entry.CLIENTE,"").isEmpty()){
             intent.putExtra(DbGaritasProjection.Entry.ID, config.getString(DbGaritasProjection.Entry.ID,""));
             intent.putExtra(DbGaritasProjection.Entry.NOMBRE, config.getString(DbGaritasProjection.Entry.NOMBRE,""));
             intent.putExtra(DbGaritasProjection.Entry.CLIENTE, config.getString(DbGaritasProjection.Entry.CLIENTE,""));
