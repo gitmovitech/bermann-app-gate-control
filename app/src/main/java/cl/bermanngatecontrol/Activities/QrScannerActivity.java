@@ -1,6 +1,7 @@
 package cl.bermanngatecontrol.Activities;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,13 +24,20 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
 
 import cl.bermanngatecontrol.Libraries.SyncUtilities;
 import cl.bermanngatecontrol.R;
 import cl.bermanngatecontrol.SQLite.DbChoferesHelper;
 import cl.bermanngatecontrol.SQLite.DbChoferesProjection;
+import cl.bermanngatecontrol.SQLite.DbEscaneosHelper;
+import cl.bermanngatecontrol.SQLite.DbEscaneosProjection;
 import cl.bermanngatecontrol.SQLite.DbGaritasProjection;
 
 public class QrScannerActivity extends AppCompatActivity {
@@ -125,6 +134,23 @@ public class QrScannerActivity extends AppCompatActivity {
                     intent.putExtra(DbChoferesProjection.Entry.RUT, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.RUT)));
                     intent.putExtra(DbChoferesProjection.Entry.ESTADO, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.ESTADO)));
                     intent.putExtra(DbChoferesProjection.Entry.FOTO, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.FOTO)));
+
+
+                    DbEscaneosHelper Escaneos = new DbEscaneosHelper(getApplicationContext());
+                    ContentValues values = new ContentValues();
+                    values.put(DbEscaneosProjection.Entry.CLIENTE, config.getString(DbGaritasProjection.Entry.CLIENTE,""));
+                    values.put(DbEscaneosProjection.Entry.ESTADO, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.ESTADO)));
+                    values.put(DbEscaneosProjection.Entry.SYNC, "0");
+                    values.put(DbEscaneosProjection.Entry.GARITA, config.getString(DbGaritasProjection.Entry.ID,""));
+                    values.put(DbEscaneosProjection.Entry.RUT, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.RUT)));
+                    Date date = new Date();
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    values.put(DbEscaneosProjection.Entry.FECHA, dateFormat.format(date));
+                    dateFormat = new SimpleDateFormat("HH:mm:ss");
+                    values.put(DbEscaneosProjection.Entry.HORA, dateFormat.format(date));
+                    Escaneos.insert(values);
+                    Escaneos.close();
+
 
                     new Thread() {
                         @Override
