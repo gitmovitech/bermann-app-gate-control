@@ -149,8 +149,6 @@ public class SyncUtilities {
      */
     public void getGaritasCallback(final CallbackSync cb){
 
-        //@todo Probar sincronizacion de garitas con callback
-
         url_garitas = context.getResources().getString(R.string.url_garitas);
         REST = new RESTService(context);
 
@@ -172,8 +170,6 @@ public class SyncUtilities {
      * @param data
      */
     public void setGaritasToDatabase(JSONArray data){
-
-        //@todo Probar guardado de garitas en base de datos
 
         JSONObject item;
         ContentValues values;
@@ -205,8 +201,7 @@ public class SyncUtilities {
      * @param cb
      */
     public void setGaritasToDatabase(JSONArray data, CallbackSync cb){
-        //@todo Probar guardado de garitas en base de datos con callback
-        setChoferesToDatabase(data);
+        setGaritasToDatabase(data);
         cb.success();
     }
 

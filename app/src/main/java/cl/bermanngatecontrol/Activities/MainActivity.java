@@ -141,26 +141,14 @@ public class MainActivity extends AppCompatActivity {
         final Intent intent = new Intent(getApplicationContext(), SyncGaritas.class);
         if(c.getCount() == 0){
 
-            //PARA TEST INSERCION POR PRIMERA VEZ
-            ContentValues values = new ContentValues();
-            values.put(DbGaritasProjection.Entry.ID, "2");
-            values.put(DbGaritasProjection.Entry.NOMBRE, "GARITA NORTE");
-            values.put(DbGaritasProjection.Entry.CLIENTE, "1");
-            Garitas.insert(values);
-            startService(intent);
-
-            try{
-                dialog.hide();
-            } catch (Exception e){}
-
-            //@todo Sincronizar garitas por primera vez
-            /*sync_utilities = new SyncUtilities(this);
+            sync_utilities = new SyncUtilities(this);
             if(sync_utilities.detectInternet()){
-                final ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "", getResources().getString(R.string.syncing_first_time), false);
                 sync_utilities.getGaritasCallback(new CallbackSync(){
                     @Override
                     public void success() {
-                        dialog.hide();
+                        try{
+                            dialog.hide();
+                        } catch (Exception e){}
                         startService(intent);
                     }
                 });
@@ -176,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 });
                 alert.create();
                 alert.show();
-            }*/
+            }
 
         } else {
             startService(intent);
