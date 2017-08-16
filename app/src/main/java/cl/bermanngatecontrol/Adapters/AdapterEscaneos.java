@@ -71,7 +71,7 @@ public class AdapterEscaneos extends BaseAdapter {
         Date dateFormat;
         try {
             dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(escaneos.get(position).FECHA+ " " +escaneos.get(position).HORA);
-            fecha.setText(dateFormat.toLocaleString());
+            fecha.setText(new SimpleDateFormat("EEEE").format(dateFormat) +" "+ dateFormat.toLocaleString());
         } catch (ParseException e) {
             e.printStackTrace();
         }

@@ -35,6 +35,7 @@ public class DbEscaneosHelper extends SQLiteOpenHelper {
         query += DbEscaneosProjection.Entry.RUT+" TEXT NOT NULL,";
         query += DbEscaneosProjection.Entry.ESTADO+" TEXT NOT NULL,";
         query += DbEscaneosProjection.Entry.SYNC+" TEXT NOT NULL,";
+        query += DbEscaneosProjection.Entry.ORDEN+" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,";
         query += DbEscaneosProjection.Entry.CLIENTE+" TEXT NOT NULL)";
         db.execSQL(query);
     }
@@ -63,7 +64,7 @@ public class DbEscaneosHelper extends SQLiteOpenHelper {
 
     public Cursor getAll(){
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query(DbEscaneosProjection.Entry.TABLE_NAME, projection, null, null, null, null, null);
+        Cursor cursor = db.query(DbEscaneosProjection.Entry.TABLE_NAME, projection, null, null, null, null, DbEscaneosProjection.Entry.ORDEN + " DESC");
         return cursor;
     }
 }

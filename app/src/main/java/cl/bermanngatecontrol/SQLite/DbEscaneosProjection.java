@@ -15,5 +15,6 @@ public class DbEscaneosProjection {
         public static final String ESTADO = "ESTADO";
         public static final String CLIENTE = "CLIENTE";
         public static final String SYNC = "SYNC";
+        public static final String ORDEN = "ORDEN";
     }
 }
