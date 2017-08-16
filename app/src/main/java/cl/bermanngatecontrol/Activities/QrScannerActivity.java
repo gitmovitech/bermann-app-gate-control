@@ -87,7 +87,7 @@ public class QrScannerActivity extends AppCompatActivity {
         url_set_mobile_device += "&version_app="+getResources().getString(R.string.version);
         url_set_mobile_device += "&so="+Build.VERSION.RELEASE;
         url_set_mobile_device += "&cliente="+getIntent().getStringExtra(DbGaritasProjection.Entry.CLIENTE);
-        url_set_mobile_device += "&garita="+getIntent().getStringExtra(DbGaritasProjection.Entry.NOMBRE);
+        url_set_mobile_device += "&garita="+getIntent().getStringExtra(DbGaritasProjection.Entry.ID);
         sync_utilities.setMobileDevice(url_set_mobile_device);
     }
 
