@@ -10,6 +10,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
+import java.util.ArrayList;
+
+import cl.bermanngatecontrol.Adapters.AdapterEscaneos;
+import cl.bermanngatecontrol.Adapters.ModelEscaneos;
 import cl.bermanngatecontrol.R;
 import cl.bermanngatecontrol.SQLite.DbChoferesProjection;
 import cl.bermanngatecontrol.SQLite.DbEscaneosHelper;
@@ -42,16 +46,21 @@ public class ResultActivity extends AppCompatActivity {
 
 
         ListView Registros = (ListView) findViewById(R.id.ListViewRegistros);
-        ArrayAdapter<String> Listado = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-
+        ArrayList<ModelEscaneos> ArrayEscaneos = new ArrayList<>();
 
         DbEscaneosHelper Escaneos = new DbEscaneosHelper(getApplicationContext());
         Cursor c = Escaneos.getAll();
         while(c.moveToNext()){
-            Listado.add(c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.FECHA)));
+            ArrayEscaneos.add(new ModelEscaneos(
+                    c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.FECHA)),
+                    c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.HORA)),
+                    c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.GARITA)),
+                    c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.ESTADO))
+            ));
         }
         c.close();
         Escaneos.close();
+        AdapterEscaneos Listado = new AdapterEscaneos(this, ArrayEscaneos);
         Registros.setAdapter(Listado);
     }
 
