@@ -38,10 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     IntentIntegrator integrator;
     Intent intent;
-    SyncUtilities sync_utilities;
-    ProgressDialog dialog;
     SharedPreferences config;
-    private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 0x11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,123 +75,6 @@ public class MainActivity extends AppCompatActivity {
                 integrator.initiateScan();
             }
         });
-
-        askForWriteExternalStorage();
-    }
-
-
-
-    /**
-     * SINCRONIZACION DE CHOFERES
-     */
-    protected void SyncChoferes(){
-        DbChoferesHelper Choferes = new DbChoferesHelper(getApplicationContext());
-        Cursor c = Choferes.getAll();
-        final Intent intent = new Intent(getApplicationContext(), SyncChoferes.class);
-        if(c.getCount() == 0){
-            dialog = ProgressDialog.show(MainActivity.this, "", getResources().getString(R.string.syncing_first_time), false);
-
-            sync_utilities = new SyncUtilities(getApplicationContext());
-            if(sync_utilities.detectInternet()){
-                sync_utilities.getChoferesCallback(new CallbackSync(){
-                    @Override
-                    public void success() {
-                        SyncGaritas();
-                    }
-                });
-            } else {
-                dialog.hide();
-                AlertDialog.Builder alert = new AlertDialog.Builder(getApplicationContext());
-                alert.setTitle(getResources().getString(R.string.error));
-                alert.setMessage(getResources().getString(R.string.connection_error_message));
-                alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                        finish();
-                    }
-                });
-                alert.create();
-                alert.show();
-            }
-
-        } else {
-            startService(intent);
-            SyncGaritas();
-        }
-        c.close();
-        Choferes.close();
-
-    }
-
-
-
-    /**
-     * SINCRONIZACION DE GARITAS
-     */
-    protected void SyncGaritas(){
-        DbGaritasHelper Garitas = new DbGaritasHelper(getApplicationContext());
-        Cursor c = Garitas.getAll();
-        final Intent intent = new Intent(getApplicationContext(), SyncGaritas.class);
-        if(c.getCount() == 0){
-
-            sync_utilities = new SyncUtilities(this);
-            if(sync_utilities.detectInternet()){
-                sync_utilities.getGaritasCallback(new CallbackSync(){
-                    @Override
-                    public void success() {
-                        try{
-                            dialog.hide();
-                        } catch (Exception e){}
-                        startService(intent);
-
-                        config.edit().putString("LAST_SYNC_DATE",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())).commit();
-
-                    }
-                });
-            } else {
-                AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                alert.setTitle(getResources().getString(R.string.error));
-                alert.setMessage(getResources().getString(R.string.connection_error_message));
-                alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                        finish();
-                    }
-                });
-                alert.create();
-                alert.show();
-            }
-
-        } else {
-            startService(intent);
-            try{
-                dialog.hide();
-            } catch (Exception e){}
-
-        }
-        c.close();
-        Garitas.close();
-
-    }
-
-
-    protected void askForWriteExternalStorage(){
-        String[] permissions = {"android.permission.WRITE_EXTERNAL_STORAGE"};
-        ActivityCompat.requestPermissions(this, permissions, WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                SyncChoferes();
-            } else {
-                Toast.makeText(getApplicationContext(), "El permiso de escritura para guardar las fotografías es requerido", Toast.LENGTH_SHORT).show();
-                askForWriteExternalStorage();
-            }
-        }
     }
 
 

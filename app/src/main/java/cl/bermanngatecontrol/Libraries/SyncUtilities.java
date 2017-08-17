@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -123,35 +124,36 @@ public class SyncUtilities {
 
 
 
-    public void getChoferImages(JSONArray data){
-        ArrayList<String> ImageList = new ArrayList<>();
-        JSONObject item;
-        for(int n = 0; n < data.length(); n++){
-            try {
-                item = (JSONObject) data.get(n);
-                if(!item.getString("foto_chofer").equals("null")){
-                    ImageList.add(item.getString("foto_chofer"));
-                }
+    public void getChoferImages(CallbackSync cb){
 
-            } catch (JSONException e) {
-                e.printStackTrace();
+        ArrayList<String> ImageList = new ArrayList<>();
+        DbChoferesHelper Choferes = new DbChoferesHelper(context);
+        Cursor c = Choferes.getAll();
+        while(c.moveToNext()){
+            if(!c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.FOTO)).equals("null")){
+                ImageList.add(c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.FOTO)));
             }
         }
+        c.close();
+        Choferes.close();
         if(ImageList.size() > 0){
-            downloadChoferImages(ImageList, 0);
+            downloadChoferImages(ImageList, 0, cb);
         }
     }
 
 
 
-    public void downloadChoferImages(final ArrayList<String> ImageList, final int n){
+    public void downloadChoferImages(final ArrayList<String> ImageList, final int n, final CallbackSync cb){
         if(ImageList.size() > n) {
+            Log.d("Descargando", ImageList.get(n).toString());
             new ImageDownload(context, context.getResources().getString(R.string.url_foto_chofer) + ImageList.get(n).toString(), ImageList.get(n).toString(), new CallbackSync() {
                 @Override
                 public void success() {
-                    downloadChoferImages(ImageList, n + 1);
+                    downloadChoferImages(ImageList, n + 1, cb);
                 }
             });
+        } else {
+            cb.success();
         }
     }
 

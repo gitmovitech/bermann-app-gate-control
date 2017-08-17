@@ -11,6 +11,10 @@
         Sincronizando por primera vez.\n
         Por favor espere...
     </string>
+    <string name="syncing_imagenes">
+        Descargando fotografías.\n
+        Por favor espere...
+    </string>
     <string name="connection_error_message">
         Ha habido un error de conexión al servidor.
         Compruebe que posee una conexión a Internet activa.
@@ -36,6 +40,8 @@
 
     <string name="acceso_aprobado">Acceso aprobado</string>
     <string name="acceso_rechazado">Acceso rechazado</string>
+
+    <string name="perms_write_required">El permiso de escritura para guardar las fotografías es requerido</string>
 
     <string name="url_choferes">https://ws.primeraruta.com/ws_recurso_php/RestController.php?accion=gettransportistas_choferes</string>
     <string name="url_garitas">https://ws.primeraruta.com/ws_recurso_php/RestController.php?accion=get_garitas</string>

@@ -25,7 +25,7 @@ public class ImageDownload {
                 file.mkdirs();
                 file = new File(filesdir + filename);
 
-                if (file.exists()) {
+                if (!file.exists()) {
                     try {
                         Bitmap bitmap = Picasso.with(ctx).load(url).get();
                         file.createNewFile();
