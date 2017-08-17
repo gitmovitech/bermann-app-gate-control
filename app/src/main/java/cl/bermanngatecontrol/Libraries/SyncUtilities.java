@@ -1,6 +1,8 @@
 package cl.bermanngatecontrol.Libraries;
 
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import cl.bermanngatecontrol.Activities.MainActivity;
 import cl.bermanngatecontrol.R;
 import cl.bermanngatecontrol.SQLite.DbChoferesHelper;
 import cl.bermanngatecontrol.SQLite.DbChoferesProjection;
@@ -117,12 +120,17 @@ public class SyncUtilities {
 
         Choferes.close();
 
-        getChoferImages(data);
+        getChoferImages(data, new CallbackSync(){
+            @Override
+            public void success() {
+                super.success();
+            }
+        });
     }
 
 
 
-    public void getChoferImages(JSONArray data){
+    public void getChoferImages(JSONArray data, CallbackSync cb){
         ArrayList<String> ImageList = new ArrayList<>();
         JSONObject item;
         for(int n = 0; n < data.length(); n++){
@@ -137,20 +145,22 @@ public class SyncUtilities {
             }
         }
         if(ImageList.size() > 0){
-            downloadChoferImages(ImageList, 0);
+            downloadChoferImages(ImageList, 0, cb);
         }
     }
 
 
 
-    public void downloadChoferImages(final ArrayList<String> ImageList, final int n){
+    public void downloadChoferImages(final ArrayList<String> ImageList, final int n, final CallbackSync cb){
         if(ImageList.size() > n) {
             new ImageDownload(context, context.getResources().getString(R.string.url_foto_chofer) + ImageList.get(n).toString(), ImageList.get(n).toString(), new CallbackSync() {
                 @Override
                 public void success() {
-                    downloadChoferImages(ImageList, n + 1);
+                    downloadChoferImages(ImageList, n + 1, cb);
                 }
             });
+        } else {
+            cb.success();
         }
     }
 
@@ -161,8 +171,34 @@ public class SyncUtilities {
      * @param cb
      */
     public void setChoferesToDatabase(JSONArray data, CallbackSync cb){
-        setChoferesToDatabase(data);
-        cb.success();
+        JSONObject item;
+        ContentValues values;
+
+        DbChoferesHelper Choferes = new DbChoferesHelper(context);
+        Choferes.deleteAll();
+
+        for(int n = 0; n < data.length(); n++){
+            try {
+                item = (JSONObject) data.get(n);
+                values = new ContentValues();
+                values.put(DbChoferesProjection.Entry.NOMBRE, item.getString("nombre"));
+                values.put(DbChoferesProjection.Entry.APELLIDO_PATERNO, item.getString("apellido_paterno"));
+                values.put(DbChoferesProjection.Entry.RUT, item.getString("rut"));
+                values.put(DbChoferesProjection.Entry.ESTADO, item.getString("estado"));
+                values.put(DbChoferesProjection.Entry.FOTO, item.getString("foto_chofer"));
+                Choferes.insert(values);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        config.edit().putString("LAST_SYNC_DATE",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())).commit();
+
+        Choferes.close();
+
+        getChoferImages(data, cb);
     }
 
 
