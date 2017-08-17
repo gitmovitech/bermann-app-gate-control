@@ -14,7 +14,7 @@ public class SyncChoferes extends Service {
 
     Context context;
     SyncUtilities sync_utilities;
-    Integer timeSleep = 1000*60*60;
+    Integer timeSleep = 20000;//1000*60*60;
 
     public SyncChoferes() {
     }

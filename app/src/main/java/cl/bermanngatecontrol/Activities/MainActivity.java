@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         DbChoferesHelper Choferes = new DbChoferesHelper(getApplicationContext());
         Cursor c = Choferes.getAll();
         final Intent intent = new Intent(getApplicationContext(), SyncChoferes.class);
-        if(c.getCount() > 0){
+        if(c.getCount() == 0){
             dialog = ProgressDialog.show(MainActivity.this, "", getResources().getString(R.string.syncing_first_time), false);
 
             sync_utilities = new SyncUtilities(getApplicationContext());
