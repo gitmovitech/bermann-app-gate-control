@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -54,6 +55,18 @@ public class QrScannerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_qr_scanner);
 
         config = getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
+
+
+        TextView last_sync_date = (TextView) findViewById(R.id.last_sync_date);
+        Date dateFormat;
+        try {
+            dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(config.getString("LAST_SYNC_DATE", ""));
+            last_sync_date.setText("Ultima sincronización: "+new SimpleDateFormat("EEEE").format(dateFormat) +" "+ dateFormat.toLocaleString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
 
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {

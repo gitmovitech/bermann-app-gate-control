@@ -37,6 +37,16 @@
             android:text="@string/txt_scan_message"
             android:textSize="13dip" />
 
+        <TextView
+            android:paddingTop="10dp"
+            android:id="@+id/last_sync_date"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:text="Ultima sincronización: 10/12/2012 a las 10:30:23"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
 </RelativeLayout>

@@ -3,6 +3,7 @@ package cl.bermanngatecontrol.Libraries;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -14,6 +15,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 import cl.bermanngatecontrol.R;
@@ -28,9 +31,11 @@ public class SyncUtilities {
     RESTService REST;
     String url_choferes;
     String url_garitas;
+    SharedPreferences config;
 
     public SyncUtilities(Context context){
         this.context = context;
+        config = context.getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
     }
 
 
@@ -99,6 +104,9 @@ public class SyncUtilities {
                 values.put(DbChoferesProjection.Entry.ESTADO, item.getString("estado"));
                 values.put(DbChoferesProjection.Entry.FOTO, item.getString("foto_chofer"));
                 Choferes.insert(values);
+
+                config.edit().putString("LAST_SYNC_DATE",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())).commit();
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

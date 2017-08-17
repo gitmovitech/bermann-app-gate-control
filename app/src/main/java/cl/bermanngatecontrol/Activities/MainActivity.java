@@ -18,6 +18,9 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import cl.bermanngatecontrol.Libraries.CallbackSync;
 import cl.bermanngatecontrol.Libraries.SyncUtilities;
 import cl.bermanngatecontrol.R;
@@ -137,6 +140,9 @@ public class MainActivity extends AppCompatActivity {
                             dialog.hide();
                         } catch (Exception e){}
                         startService(intent);
+
+                        config.edit().putString("LAST_SYNC_DATE",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())).commit();
+
                     }
                 });
             } else {
