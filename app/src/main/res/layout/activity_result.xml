@@ -16,11 +16,13 @@
             android:background="@color/colorPrimary"
             android:layout_height="200dp">
 
-            <ImageView
+            <ImageButton
+                android:cropToPadding="true"
                 android:id="@+id/foto_chofer"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_margin="10dp"
+                android:elevation="5dp"
                 android:src="@drawable/default_user_profile" />
 
             <LinearLayout

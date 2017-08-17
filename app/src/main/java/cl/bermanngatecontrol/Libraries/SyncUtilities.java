@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -32,6 +33,7 @@ public class SyncUtilities {
     String url_choferes;
     String url_garitas;
     SharedPreferences config;
+
 
     public SyncUtilities(Context context){
         this.context = context;
@@ -105,15 +107,51 @@ public class SyncUtilities {
                 values.put(DbChoferesProjection.Entry.FOTO, item.getString("foto_chofer"));
                 Choferes.insert(values);
 
-                config.edit().putString("LAST_SYNC_DATE",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())).commit();
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
         }
 
+        config.edit().putString("LAST_SYNC_DATE",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())).commit();
+
         Choferes.close();
+
+        getChoferImages(data);
+    }
+
+
+
+    public void getChoferImages(JSONArray data){
+        ArrayList<String> ImageList = new ArrayList<>();
+        JSONObject item;
+        for(int n = 0; n < data.length(); n++){
+            try {
+                item = (JSONObject) data.get(n);
+                if(!item.getString("foto_chofer").equals("null")){
+                    ImageList.add(item.getString("foto_chofer"));
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        if(ImageList.size() > 0){
+            downloadChoferImages(ImageList, 0);
+        }
+    }
+
+
+
+    public void downloadChoferImages(final ArrayList<String> ImageList, final int n){
+        if(ImageList.size() > n) {
+            new ImageDownload(context, context.getResources().getString(R.string.url_foto_chofer) + ImageList.get(n).toString(), ImageList.get(n).toString(), new CallbackSync() {
+                @Override
+                public void success() {
+                    downloadChoferImages(ImageList, n + 1);
+                }
+            });
+        }
     }
 
 

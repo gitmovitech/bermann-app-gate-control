@@ -2,14 +2,18 @@ package cl.bermanngatecontrol.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     SyncUtilities sync_utilities;
     ProgressDialog dialog;
     SharedPreferences config;
+    private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 0x11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        SyncChoferes();
+        askForWriteExternalStorage();
     }
 
 
@@ -85,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         DbChoferesHelper Choferes = new DbChoferesHelper(getApplicationContext());
         Cursor c = Choferes.getAll();
         final Intent intent = new Intent(getApplicationContext(), SyncChoferes.class);
-        if(c.getCount() == 0){
+        if(c.getCount() > 0){
             dialog = ProgressDialog.show(MainActivity.this, "", getResources().getString(R.string.syncing_first_time), false);
 
             sync_utilities = new SyncUtilities(getApplicationContext());
@@ -171,6 +176,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    protected void askForWriteExternalStorage(){
+        String[] permissions = {"android.permission.WRITE_EXTERNAL_STORAGE"};
+        ActivityCompat.requestPermissions(this, permissions, WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                SyncChoferes();
+            } else {
+                Toast.makeText(getApplicationContext(), "El permiso de escritura para guardar las fotografías es requerido", Toast.LENGTH_SHORT).show();
+                askForWriteExternalStorage();
+            }
+        }
+    }
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
