@@ -36,14 +36,37 @@ public class InitActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_init);
-        getSupportActionBar().hide();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
+
+        DbGaritasHelper Garitas = new DbGaritasHelper(getApplicationContext());
+        Cursor cgaritas = Garitas.getAll();
+        DbChoferesHelper Choferes = new DbChoferesHelper(getApplicationContext());
+        Cursor cchoferes = Choferes.getAll();
+
+        if(cgaritas.getCount() > 0 && cchoferes.getCount() > 0){
+
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            startService(new Intent(getApplicationContext(), SyncGaritas.class));
+            startService(new Intent(getApplicationContext(), SyncChoferes.class));
+
+        } else {
+
+            setContentView(R.layout.activity_init);
+            getSupportActionBar().hide();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
+            }
+
+            config = getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
+            askForWriteExternalStorage();
+
         }
 
-        config = getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
-        askForWriteExternalStorage();
+        cgaritas.close();
+        cchoferes.close();
+
+        Garitas.close();
+        Choferes.close();
+
     }
 
     protected void askForWriteExternalStorage(){
