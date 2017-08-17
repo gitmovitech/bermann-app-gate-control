@@ -7,7 +7,10 @@
     <string name="txt_firstname">Nombres</string>
     <string name="txt_lastname">Apellidos</string>
 
-    <string name="syncing_first_time">Sincronizando por primera vez, por favor espere...</string>
+    <string name="syncing_first_time">
+        Sincronizando por primera vez.\n
+        Por favor espere...
+    </string>
     <string name="connection_error_message">
         Ha habido un error de conexión al servidor.
         Compruebe que posee una conexión a Internet activa.
