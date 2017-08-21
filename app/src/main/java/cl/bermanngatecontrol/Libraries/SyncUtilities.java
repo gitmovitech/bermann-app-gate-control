@@ -139,11 +139,13 @@ public class SyncUtilities {
         c.close();
         Choferes.close();
         if(ImageList.size() > 0){
-            ContentValues values = new ContentValues();
-            values.put("completed", 0);
-            values.put("total", ImageList.size());
-            emitter.setValues(values);
-            emitter.success();
+            if(emitter != null) {
+                ContentValues values = new ContentValues();
+                values.put("completed", 0);
+                values.put("total", ImageList.size());
+                emitter.setValues(values);
+                emitter.success();
+            }
             downloadChoferImages(ImageList, 0, cb);
         }
     }
@@ -157,11 +159,13 @@ public class SyncUtilities {
                 @Override
                 public void success() {
 
-                    ContentValues values = new ContentValues();
-                    values.put("completed", n+1);
-                    values.put("total", ImageList.size());
-                    emitter.setValues(values);
-                    emitter.success();
+                    if(emitter != null) {
+                        ContentValues values = new ContentValues();
+                        values.put("completed", n + 1);
+                        values.put("total", ImageList.size());
+                        emitter.setValues(values);
+                        emitter.success();
+                    }
 
                     downloadChoferImages(ImageList, n + 1, cb);
                 }
