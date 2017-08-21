@@ -10,6 +10,8 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -37,10 +39,16 @@ public class SyncUtilities {
     String url_choferes;
     String url_garitas;
     SharedPreferences config;
-
+    CallbackSync emitter = null;
 
     public SyncUtilities(Context context){
         this.context = context;
+        config = context.getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
+    }
+
+    public SyncUtilities(Context context, CallbackSync emitter){
+        this.context = context;
+        this.emitter = emitter;
         config = context.getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
     }
 
@@ -137,6 +145,11 @@ public class SyncUtilities {
         c.close();
         Choferes.close();
         if(ImageList.size() > 0){
+            ContentValues values = new ContentValues();
+            values.put("completed", 0);
+            values.put("total", ImageList.size());
+            emitter.setValues(values);
+            emitter.success();
             downloadChoferImages(ImageList, 0, cb);
         }
     }
@@ -145,14 +158,22 @@ public class SyncUtilities {
 
     public void downloadChoferImages(final ArrayList<String> ImageList, final int n, final CallbackSync cb){
         if(ImageList.size() > n) {
-            Log.d("Descargando", ImageList.get(n).toString());
+
             new ImageDownload(context, context.getResources().getString(R.string.url_foto_chofer) + ImageList.get(n).toString(), ImageList.get(n).toString(), new CallbackSync() {
                 @Override
                 public void success() {
+
+                    ContentValues values = new ContentValues();
+                    values.put("completed", n+1);
+                    values.put("total", ImageList.size());
+                    emitter.setValues(values);
+                    emitter.success();
+
                     downloadChoferImages(ImageList, n + 1, cb);
                 }
             });
-        } else {
+        }
+        else {
             cb.success();
         }
     }

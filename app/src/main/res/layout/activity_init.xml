@@ -19,12 +19,27 @@
             android:id="@+id/linearLayout">
 
             <TextView
+                android:gravity="center"
                 android:id="@+id/txtSyncing"
                 android:textColor="@android:color/background_light"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/syncing_first_time"
                 android:textAlignment="center" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/syncing_imagenes_progress"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
 
         </LinearLayout>
 

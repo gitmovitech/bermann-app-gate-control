@@ -1,6 +1,8 @@
 package cl.bermanngatecontrol.Activities;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -146,13 +149,30 @@ public class InitActivity extends AppCompatActivity {
                 final Intent intent = new Intent(getApplicationContext(), SyncChoferes.class);
                 if(c.getCount() == 0){
 
-                    sync_utilities = new SyncUtilities(getApplicationContext());
+                    final TextView syncing_imagenes = (TextView) findViewById(R.id.txtSyncing);
+                    final TextView syncing_imagenes_progress = (TextView) findViewById(R.id.syncing_imagenes_progress);
+                    CallbackSync emitter = new CallbackSync(){
+                        @Override
+                        public void success() {
+                            super.success();
+                            if(getValues() != null) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ContentValues values = getValues();
+                                        syncing_imagenes_progress.setText(values.get("completed") + " de "+values.get("total"));
+                                    }
+                                });
+                            }
+                        }
+                    };
+
+                    sync_utilities = new SyncUtilities(getApplicationContext(), emitter);
                     if(sync_utilities.detectInternet()){
                         sync_utilities.getChoferesCallback(new CallbackSync(){
                             @Override
                             public void success() {
                                 startService(intent);
-                                TextView syncing_imagenes = (TextView) findViewById(R.id.txtSyncing);
                                 syncing_imagenes.setText(getResources().getString(R.string.syncing_imagenes));
                                 sync_utilities.getChoferImages(new CallbackSync(){
                                     @Override
@@ -160,6 +180,7 @@ public class InitActivity extends AppCompatActivity {
                                         super.success();
                                         config.edit().putString("LAST_SYNC_DATE",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())).commit();
                                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                        finish();
                                     }
                                 });
                             }
