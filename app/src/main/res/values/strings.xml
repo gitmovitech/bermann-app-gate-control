@@ -13,6 +13,7 @@
     </string>
     <string name="syncing_imagenes">
         Descargando fotografías.\n
+        Esto puede llevar algo de tiempo\n
         Por favor espere...
     </string>
     <string name="connection_error_message">
