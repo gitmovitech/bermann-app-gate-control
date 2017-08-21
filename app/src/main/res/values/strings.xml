@@ -48,5 +48,5 @@
     <string name="url_garitas">https://ws.primeraruta.com/ws_recurso_php/RestController.php?accion=get_garitas</string>
     <string name="url_set_mobile_device">https://ws.primeraruta.com/ws_recurso_php/RestController.php?accion=set_mobile_device</string>
     <string name="url_foto_chofer">http://200.111.82.34/viajes/comprobantes/</string>
-    <!--<string name="url_set_log_device">https://ws.primeraruta.com/ws_recurso_php/RestController.php?accion=set_log_device&id_device=123&id_chofer=123&estado_chofer=TRUE&comentarios=TOO</string>-->
+    <string name="url_escaneos">https://ws.primeraruta.com/ws_recurso_php/RestController.php?accion=set_log_device</string>
 </resources>

@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.android.volley.Response;
@@ -23,6 +24,8 @@ import java.util.Date;
 import cl.bermanngatecontrol.R;
 import cl.bermanngatecontrol.SQLite.DbChoferesHelper;
 import cl.bermanngatecontrol.SQLite.DbChoferesProjection;
+import cl.bermanngatecontrol.SQLite.DbEscaneosHelper;
+import cl.bermanngatecontrol.SQLite.DbEscaneosProjection;
 import cl.bermanngatecontrol.SQLite.DbGaritasHelper;
 import cl.bermanngatecontrol.SQLite.DbGaritasProjection;
 
@@ -32,13 +35,16 @@ public class SyncUtilities {
     RESTService REST;
     String url_choferes;
     String url_garitas;
+    String url_escaneos;
     SharedPreferences config;
     CallbackSync emitter = null;
     CallbackSync cbImagenes = null;
+    TelephonyManager telephonyManager;
 
     public SyncUtilities(Context context){
         this.context = context;
         config = context.getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
+        this.telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
     }
 
     public SyncUtilities(Context context, CallbackSync emitter){
@@ -68,6 +74,64 @@ public class SyncUtilities {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("ERROR", error.toString());
+            }
+        });
+    }
+
+
+    /**
+     * ENVIA REGISTROS ESCANEADOS AL SERVIDOR
+     */
+    public void postEscaneos(){
+        url_escaneos = context.getResources().getString(R.string.url_escaneos);
+        url_choferes += "&comentarios=TODO";
+        url_escaneos += "&id_device=" + telephonyManager.getDeviceId();
+        url_escaneos += "&garita="+config.getString(DbGaritasProjection.Entry.ID, "");
+        String url = url_escaneos;
+
+        DbEscaneosHelper Escaneos = new DbEscaneosHelper(context);
+        DbChoferesHelper Choferes = new DbChoferesHelper(context);
+        Cursor cho;
+        Cursor c = Escaneos.getAllNotSync();
+        while (c.moveToNext()){
+
+            cho = Choferes.getByRut(c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.RUT)));
+            cho.moveToFirst();
+            url_escaneos += "&id_chofer=" + cho.getString(cho.getColumnIndexOrThrow(DbChoferesProjection.Entry.ID));
+            cho.close();
+
+            if(c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.ESTADO)).equals("1")){
+                url_escaneos += "&estado_chofer=TRUE";
+            } else {
+                url_escaneos += "&estado_chofer=FALSE";
+            }
+            url_escaneos += "&fecha_envio=" + c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.FECHA));
+            url_escaneos += "&hora_envio=" + c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.HORA));
+
+            syncEscaneos(url_escaneos, c.getInt(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.ORDEN)));
+
+            url_escaneos = url;
+        }
+        c.close();
+        Escaneos.close();
+        Choferes.close();
+    }
+
+    private void syncEscaneos(String url, final int id){
+        Log.d("SYNC", url);
+        REST = new RESTService(context);
+        REST.get(url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                DbEscaneosHelper Escaneos = new DbEscaneosHelper(context);
+                Escaneos.setSync(id);
+                Escaneos.close();
+                Log.d("SYNC", "OK:"+id);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
             }
         });
     }

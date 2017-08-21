@@ -24,6 +24,7 @@ import cl.bermanngatecontrol.R;
 import cl.bermanngatecontrol.SQLite.DbChoferesHelper;
 import cl.bermanngatecontrol.SQLite.DbGaritasHelper;
 import cl.bermanngatecontrol.Services.SyncChoferes;
+import cl.bermanngatecontrol.Services.SyncEscaneos;
 import cl.bermanngatecontrol.Services.SyncGaritas;
 
 public class InitActivity extends AppCompatActivity {
@@ -41,11 +42,14 @@ public class InitActivity extends AppCompatActivity {
         DbChoferesHelper Choferes = new DbChoferesHelper(getApplicationContext());
         Cursor cchoferes = Choferes.getAll();
 
+        startService(new Intent(getApplicationContext(), SyncEscaneos.class));
+
         if(cgaritas.getCount() > 0 && cchoferes.getCount() > 0){
 
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             startService(new Intent(getApplicationContext(), SyncGaritas.class));
             startService(new Intent(getApplicationContext(), SyncChoferes.class));
+
             finish();
 
         } else {

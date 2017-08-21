@@ -15,5 +15,8 @@ public class BroadcastBootService extends BroadcastReceiver {
         Intent IntentGaritas = new Intent(context, SyncGaritas.class);
         context.startService(IntentGaritas);
 
+        Intent IntentEscaneos = new Intent(context, SyncEscaneos.class);
+        context.startService(IntentEscaneos);
+
     }
 }

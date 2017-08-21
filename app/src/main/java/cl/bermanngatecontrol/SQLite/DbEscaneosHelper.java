@@ -18,7 +18,8 @@ public class DbEscaneosHelper extends SQLiteOpenHelper {
         DbEscaneosProjection.Entry.RUT,
         DbEscaneosProjection.Entry.ESTADO,
         DbEscaneosProjection.Entry.SYNC,
-        DbEscaneosProjection.Entry.CLIENTE
+        DbEscaneosProjection.Entry.CLIENTE,
+        DbEscaneosProjection.Entry.ORDEN
     };;
 
     public DbEscaneosHelper(Context context) {
@@ -45,6 +46,14 @@ public class DbEscaneosHelper extends SQLiteOpenHelper {
 
     }
 
+    public void setSync(int id){
+        ContentValues values = new ContentValues();
+        values.put(DbEscaneosProjection.Entry.SYNC, "0");
+        SQLiteDatabase db = getReadableDatabase();
+        db.update(DbEscaneosProjection.Entry.TABLE_NAME, values, DbEscaneosProjection.Entry.ORDEN + " = ?", new String[]{ String.valueOf(id) });
+        db.close();
+    }
+
     public void deleteAll(){
         SQLiteDatabase db = getReadableDatabase();
         db.delete(DbEscaneosProjection.Entry.TABLE_NAME, null, null);
@@ -59,6 +68,12 @@ public class DbEscaneosHelper extends SQLiteOpenHelper {
     public Cursor getById(String id){
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(DbEscaneosProjection.Entry.TABLE_NAME, projection, DbEscaneosProjection.Entry.ID + " = ?", new String[]{ String.valueOf(id) }, null, null, null);
+        return cursor;
+    }
+
+    public Cursor getAllNotSync(){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(DbEscaneosProjection.Entry.TABLE_NAME, projection, DbEscaneosProjection.Entry.SYNC + " = ?", new String[]{ "0" }, null, null, null);
         return cursor;
     }
 

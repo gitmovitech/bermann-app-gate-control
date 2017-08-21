@@ -39,6 +39,10 @@
             android:name=".Services.SyncGaritas"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name=".Services.SyncEscaneos"
+            android:enabled="true"
+            android:exported="true" />
 
         <activity android:name=".Activities.InitActivity">
             <intent-filter>
