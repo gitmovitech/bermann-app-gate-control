@@ -34,6 +34,7 @@ public class SyncUtilities {
     String url_garitas;
     SharedPreferences config;
     CallbackSync emitter = null;
+    CallbackSync cbImagenes = null;
 
     public SyncUtilities(Context context){
         this.context = context;
@@ -44,6 +45,10 @@ public class SyncUtilities {
         this.context = context;
         this.emitter = emitter;
         config = context.getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
+    }
+
+    public void setNotificacion(CallbackSync cbImagenes){
+        this.cbImagenes = cbImagenes;
     }
 
 
@@ -122,6 +127,16 @@ public class SyncUtilities {
         config.edit().putString("LAST_SYNC_DATE",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())).commit();
 
         Choferes.close();
+
+        if(emitter == null) {
+            getChoferImages(new CallbackSync() {
+                @Override
+                public void success() {
+                    super.success();
+                    Log.d("SYNC", "Imagenes sincronizadas en background");
+                }
+            });
+        }
     }
 
 
@@ -165,6 +180,12 @@ public class SyncUtilities {
                         values.put("total", ImageList.size());
                         emitter.setValues(values);
                         emitter.success();
+                    } else if(cbImagenes != null) {
+                        ContentValues values = new ContentValues();
+                        values.put("completed", n + 1);
+                        values.put("total", ImageList.size());
+                        cbImagenes.setValues(values);
+                        cbImagenes.success();
                     }
 
                     downloadChoferImages(ImageList, n + 1, cb);
@@ -192,8 +213,6 @@ public class SyncUtilities {
      * OBTENER TODAS LAS GARITAS DESDE EL SERVICIO REST
      */
     public void getGaritas(){
-
-        //@todo Probar sincronizacion de garitas
 
         url_garitas = context.getResources().getString(R.string.url_garitas);
         REST = new RESTService(context);

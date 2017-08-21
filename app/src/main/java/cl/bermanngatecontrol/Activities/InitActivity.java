@@ -46,6 +46,7 @@ public class InitActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             startService(new Intent(getApplicationContext(), SyncGaritas.class));
             startService(new Intent(getApplicationContext(), SyncChoferes.class));
+            finish();
 
         } else {
 
