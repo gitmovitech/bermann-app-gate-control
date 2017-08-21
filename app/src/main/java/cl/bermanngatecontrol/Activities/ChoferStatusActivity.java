@@ -9,11 +9,8 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import cl.bermanngatecontrol.R;
 import cl.bermanngatecontrol.SQLite.DbChoferesProjection;
-import cl.bermanngatecontrol.SQLite.DbGaritasProjection;
 
 public class ChoferStatusActivity extends AppCompatActivity {
 

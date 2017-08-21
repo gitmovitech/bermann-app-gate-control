@@ -1,8 +1,6 @@
 package cl.bermanngatecontrol.Libraries;
 
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,8 +8,6 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -23,9 +19,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
-import cl.bermanngatecontrol.Activities.MainActivity;
 import cl.bermanngatecontrol.R;
 import cl.bermanngatecontrol.SQLite.DbChoferesHelper;
 import cl.bermanngatecontrol.SQLite.DbChoferesProjection;

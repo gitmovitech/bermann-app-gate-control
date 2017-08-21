@@ -10,7 +10,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class ImageDownload {
 

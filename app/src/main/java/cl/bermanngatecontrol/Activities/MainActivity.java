@@ -1,19 +1,14 @@
 package cl.bermanngatecontrol.Activities;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -21,18 +16,9 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import cl.bermanngatecontrol.Libraries.CallbackSync;
-import cl.bermanngatecontrol.Libraries.SyncUtilities;
 import cl.bermanngatecontrol.R;
-import cl.bermanngatecontrol.SQLite.DbChoferesHelper;
 import cl.bermanngatecontrol.SQLite.DbGaritasHelper;
 import cl.bermanngatecontrol.SQLite.DbGaritasProjection;
-import cl.bermanngatecontrol.Services.SyncChoferes;
-import cl.bermanngatecontrol.Services.SyncGaritas;
 
 public class MainActivity extends AppCompatActivity {
 
