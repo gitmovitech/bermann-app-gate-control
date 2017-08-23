@@ -36,6 +36,7 @@
     <string name="qr_credencial_scan_message">Visualice el código QR de la credencial a través de esta cámara para iniciar el escaneo</string>
     <string name="qr_garita_scan_message">Visualice el código QR de la garita a través de esta cámara para iniciar el escaneo</string>
     <string name="qr_scan_cancel">Ha cancelado el escaneo de código</string>
+    <string name="qr_scan_invalid">El código escaneado es inválido</string>
 
     <string name="loading">Cargando, por favor espere...</string>
 

@@ -79,11 +79,52 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    protected void validateCode(String qrcode){
+        String[] code = qrcode.split("|");
+        try{
+            if(Integer.parseInt(code[0]) > 0 && Integer.parseInt(code[1]) > 0){
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.setTitle("OK");
+                alert.setMessage(code[0]+"-"+code[1]);
+                alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                alert.create();
+                alert.show();
+            } else {
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.setTitle(getResources().getString(R.string.error));
+                alert.setMessage(getResources().getString(R.string.qr_scan_invalid));
+                alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                alert.create();
+                alert.show();
+            }
+        } catch (Exception e){
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setTitle(getResources().getString(R.string.error));
+            alert.setMessage(getResources().getString(R.string.qr_scan_invalid));
+            alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            alert.create();
+            alert.show();
+        }
+    }
+
+
     /**
      * VALIDAR GARITA
      * @param code
      */
-    protected void validateCode(String code){
+    /*protected void validateCode(String code){
         DbGaritasHelper Garitas = new DbGaritasHelper(getApplicationContext());
         Cursor c = Garitas.getById(code);
         if(c.getCount() > 0){
@@ -122,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
             alert.create();
             alert.show();
         }
-    }
+    }*/
 
 
 }

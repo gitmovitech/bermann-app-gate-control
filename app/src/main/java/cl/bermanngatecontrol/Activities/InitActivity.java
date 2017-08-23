@@ -37,17 +37,17 @@ public class InitActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DbGaritasHelper Garitas = new DbGaritasHelper(getApplicationContext());
-        Cursor cgaritas = Garitas.getAll();
+        //DbGaritasHelper Garitas = new DbGaritasHelper(getApplicationContext());
+        //Cursor cgaritas = Garitas.getAll();
         DbChoferesHelper Choferes = new DbChoferesHelper(getApplicationContext());
         Cursor cchoferes = Choferes.getAll();
 
         startService(new Intent(getApplicationContext(), SyncEscaneos.class));
 
-        if(cgaritas.getCount() > 0 && cchoferes.getCount() > 0){
+        if(/*cgaritas.getCount() > 0 && */cchoferes.getCount() > 0){
 
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            startService(new Intent(getApplicationContext(), SyncGaritas.class));
+            //startService(new Intent(getApplicationContext(), SyncGaritas.class));
             startService(new Intent(getApplicationContext(), SyncChoferes.class));
 
             finish();
@@ -65,10 +65,10 @@ public class InitActivity extends AppCompatActivity {
 
         }
 
-        cgaritas.close();
+        //cgaritas.close();
         cchoferes.close();
 
-        Garitas.close();
+        //Garitas.close();
         Choferes.close();
 
     }
@@ -84,7 +84,8 @@ public class InitActivity extends AppCompatActivity {
 
         if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                SyncGaritas();
+                //SyncGaritas();
+                SyncChoferes();
             } else {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.perms_write_required), Toast.LENGTH_SHORT).show();
                 askForWriteExternalStorage();
@@ -96,7 +97,7 @@ public class InitActivity extends AppCompatActivity {
     /**
      * SINCRONIZACION DE GARITAS
      */
-    protected void SyncGaritas(){
+    /*protected void SyncGaritas(){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -135,7 +136,7 @@ public class InitActivity extends AppCompatActivity {
                 Garitas.close();
             }
         }).start();
-    }
+    }*/
 
 
     /**

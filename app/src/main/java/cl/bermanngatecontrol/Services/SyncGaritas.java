@@ -23,7 +23,7 @@ public class SyncGaritas extends Service {
     public void onCreate() {
 
 
-        context = getApplicationContext();
+        /*context = getApplicationContext();
         sync_utilities = new SyncUtilities(context);
 
 
@@ -51,7 +51,7 @@ public class SyncGaritas extends Service {
                 }
 
             }
-        }).start();
+        }).start();*/
     }
 
     @Override
