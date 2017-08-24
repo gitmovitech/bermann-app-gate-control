@@ -144,8 +144,7 @@ public class SyncUtilities {
      * @param cb
      */
     public void getChoferesCallback(final CallbackSync cb){
-
-        url_choferes = context.getResources().getString(R.string.url_choferes);
+        url_choferes = context.getResources().getString(R.string.url_choferes)+"&id="+config.getString("db_id", null);
         REST = new RESTService(context);
 
         REST.getJSONArray(url_choferes, new Response.Listener<JSONArray>() {
@@ -311,6 +310,7 @@ public class SyncUtilities {
                 try {
                     if(response.getString("ok").equals("1")){
                         ContentValues values = new ContentValues();
+                        values.put(DbGaritasProjection.Entry.ID, response.getString("id"));
                         values.put(DbGaritasProjection.Entry.NOMBRE, response.getString("nombre"));
                         cb.setValues(values);
                         cb.success();

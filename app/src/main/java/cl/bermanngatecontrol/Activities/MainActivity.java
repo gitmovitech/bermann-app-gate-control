@@ -1,5 +1,6 @@
 package cl.bermanngatecontrol.Activities;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -95,9 +96,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void success() {
                         super.success();
-                        String arr[] = qrcode.split("|");
-                        intent.putExtra(DbGaritasProjection.Entry.ID, arr[1]);
-                        intent.putExtra(DbGaritasProjection.Entry.NOMBRE, getValues().getAsString(DbGaritasProjection.Entry.NOMBRE));
+                        String arr[] = qrcode.split("\\|");
+                        String id = getValues().getAsString(DbGaritasProjection.Entry.ID);
+                        String nombre = getValues().getAsString(DbGaritasProjection.Entry.NOMBRE);
+                        intent.putExtra(DbGaritasProjection.Entry.ID, id);
+                        intent.putExtra(DbGaritasProjection.Entry.NOMBRE, nombre);
                         config.edit().putString("db_id", arr[0]).commit();
                         startActivity(intent);
                         finish();

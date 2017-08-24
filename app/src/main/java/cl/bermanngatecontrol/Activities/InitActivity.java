@@ -36,6 +36,7 @@ public class InitActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
 
         //DbGaritasHelper Garitas = new DbGaritasHelper(getApplicationContext());
         //Cursor cgaritas = Garitas.getAll();
@@ -46,7 +47,7 @@ public class InitActivity extends AppCompatActivity {
 
         if(/*cgaritas.getCount() > 0 && */cchoferes.getCount() > 0){
 
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            startActivity(new Intent(getApplicationContext(), QrScannerActivity.class).putExtras(getIntent().getExtras()));
             //startService(new Intent(getApplicationContext(), SyncGaritas.class));
             startService(new Intent(getApplicationContext(), SyncChoferes.class));
 
@@ -181,7 +182,7 @@ public class InitActivity extends AppCompatActivity {
                                     public void success() {
                                         super.success();
                                         config.edit().putString("LAST_SYNC_DATE",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())).commit();
-                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                        startActivity(new Intent(getApplicationContext(), QrScannerActivity.class).putExtras(getIntent().getExtras()));
                                         finish();
                                     }
                                 });
