@@ -1,6 +1,7 @@
 package cl.bermanngatecontrol.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +21,12 @@ import cl.bermanngatecontrol.SQLite.DbGaritasProjection;
 public class AdapterEscaneos extends BaseAdapter {
     private Context context;
     private ArrayList<ModelEscaneos> escaneos;
+    private Intent intent;
 
-    public AdapterEscaneos(Context context, ArrayList<ModelEscaneos> equipos) {
+    public AdapterEscaneos(Context context, ArrayList<ModelEscaneos> equipos, Intent intent) {
         this.context = context;
         this.escaneos = equipos;
+        this.intent = intent;
     }
 
     @Override
@@ -61,12 +64,13 @@ public class AdapterEscaneos extends BaseAdapter {
             estado = "Acceso Rechazado";
         }
 
-        DbGaritasHelper Garitas = new DbGaritasHelper(context);
+        /*DbGaritasHelper Garitas = new DbGaritasHelper(context);
         Cursor c = Garitas.getById(escaneos.get(position).GARITA);
         c.moveToFirst();
         String nombre_garita = c.getString(c.getColumnIndexOrThrow(DbGaritasProjection.Entry.NOMBRE));
         c.close();
-        Garitas.close();
+        Garitas.close();*/
+        String nombre_garita = intent.getStringExtra(DbGaritasProjection.Entry.NOMBRE);
 
         Date dateFormat;
         try {

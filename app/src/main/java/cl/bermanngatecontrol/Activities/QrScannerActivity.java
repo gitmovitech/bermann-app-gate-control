@@ -82,11 +82,7 @@ public class QrScannerActivity extends AppCompatActivity {
 
         integrator = new IntentIntegrator(this);
         intent = new Intent(this, ChoferStatusActivity.class);
-        try {
-            intent.putExtras(getIntent().getExtras());
-        } catch (Exception e){
-
-        }
+        intent.putExtras(getIntent().getExtras());
 
         NombreGarita = getIntent().getStringExtra(DbGaritasProjection.Entry.NOMBRE);
         TextView txtNombreGarita = (TextView) findViewById(R.id.txtNombreGarita);

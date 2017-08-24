@@ -83,7 +83,7 @@ public class ResultActivity extends AppCompatActivity {
         }
         c.close();
         Escaneos.close();
-        AdapterEscaneos Listado = new AdapterEscaneos(this, ArrayEscaneos);
+        AdapterEscaneos Listado = new AdapterEscaneos(this, ArrayEscaneos, getIntent());
         Registros.setAdapter(Listado);
     }
 
