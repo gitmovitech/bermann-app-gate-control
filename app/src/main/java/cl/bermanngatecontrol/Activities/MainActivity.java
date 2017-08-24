@@ -9,6 +9,8 @@ import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -16,6 +18,8 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import cl.bermanngatecontrol.Libraries.CallbackSync;
+import cl.bermanngatecontrol.Libraries.SyncUtilities;
 import cl.bermanngatecontrol.R;
 import cl.bermanngatecontrol.SQLite.DbGaritasHelper;
 import cl.bermanngatecontrol.SQLite.DbGaritasProjection;
@@ -30,15 +34,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        intent = new Intent(this, QrScannerActivity.class);
+        //intent = new Intent(this, QrScannerActivity.class);
+        intent = new Intent(this, InitActivity.class);
 
         config = getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
         if(!config.getString(DbGaritasProjection.Entry.ID,"").isEmpty()
-                && !config.getString(DbGaritasProjection.Entry.NOMBRE,"").isEmpty()
-                && !config.getString(DbGaritasProjection.Entry.CLIENTE,"").isEmpty()){
+                && !config.getString(DbGaritasProjection.Entry.NOMBRE,"").isEmpty()){
+                //&& !config.getString(DbGaritasProjection.Entry.CLIENTE,"").isEmpty()){
             intent.putExtra(DbGaritasProjection.Entry.ID, config.getString(DbGaritasProjection.Entry.ID,""));
             intent.putExtra(DbGaritasProjection.Entry.NOMBRE, config.getString(DbGaritasProjection.Entry.NOMBRE,""));
-            intent.putExtra(DbGaritasProjection.Entry.CLIENTE, config.getString(DbGaritasProjection.Entry.CLIENTE,""));
+            //intent.putExtra(DbGaritasProjection.Entry.CLIENTE, config.getString(DbGaritasProjection.Entry.CLIENTE,""));
             startActivity(intent);
             finish();
         }
@@ -79,24 +84,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    protected void validateCode(String qrcode){
-        String[] code = qrcode.split("|");
-        try{
-            if(Integer.parseInt(code[0]) > 0 && Integer.parseInt(code[1]) > 0){
-                AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                alert.setTitle("OK");
-                alert.setMessage(code[0]+"-"+code[1]);
-                alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
+    protected void validateCode(final String qrcode){
+        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        if(qrcode.contains("|")){
+
+            SyncUtilities sync = new SyncUtilities(this);
+            if(sync.detectInternet()){
+
+                sync.getGaritasCallback(qrcode, new CallbackSync(){
+                    @Override
+                    public void success() {
+                        super.success();
+                        String arr[] = qrcode.split("|");
+                        intent.putExtra(DbGaritasProjection.Entry.ID, arr[1]);
+                        intent.putExtra(DbGaritasProjection.Entry.NOMBRE, getValues().getAsString(DbGaritasProjection.Entry.NOMBRE));
+                        config.edit().putString("db_id", arr[0]).commit();
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void error() {
+                        super.error();
+
+                        alert.setTitle(getResources().getString(R.string.error));
+                        alert.setMessage(getResources().getString(R.string.garita_not_found));
+                        alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                        alert.create();
+                        alert.show();
                     }
                 });
-                alert.create();
-                alert.show();
+
             } else {
-                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
                 alert.setTitle(getResources().getString(R.string.error));
-                alert.setMessage(getResources().getString(R.string.qr_scan_invalid));
+                alert.setMessage(getResources().getString(R.string.connection_error_message));
                 alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
@@ -105,8 +131,8 @@ public class MainActivity extends AppCompatActivity {
                 alert.create();
                 alert.show();
             }
-        } catch (Exception e){
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        } else {
             alert.setTitle(getResources().getString(R.string.error));
             alert.setMessage(getResources().getString(R.string.qr_scan_invalid));
             alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {

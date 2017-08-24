@@ -17,10 +17,17 @@
         android:roundIcon="@drawable/bermanngps"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.MainActivity"/>
+        <activity android:name=".Activities.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".Activities.QrScannerActivity" />
         <activity android:name=".Activities.ResultActivity" />
         <activity android:name=".Activities.ChoferStatusActivity" />
+        <activity android:name=".Activities.InitActivity"/>
 
         <receiver
             android:name=".Services.BroadcastBootService"
@@ -44,13 +51,6 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".Activities.InitActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

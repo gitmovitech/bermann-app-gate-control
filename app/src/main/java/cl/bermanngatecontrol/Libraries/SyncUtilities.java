@@ -3,6 +3,7 @@ package cl.bermanngatecontrol.Libraries;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
@@ -21,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import cl.bermanngatecontrol.Activities.InitActivity;
 import cl.bermanngatecontrol.R;
 import cl.bermanngatecontrol.SQLite.DbChoferesHelper;
 import cl.bermanngatecontrol.SQLite.DbChoferesProjection;
@@ -298,14 +300,26 @@ public class SyncUtilities {
      * OBTENER TODAS LAS GARITAS DESDE EL SERVICIO REST CON CALLBACK
      * @param cb
      */
-    public void getGaritasCallback(final CallbackSync cb){
+    public void getGaritasCallback(String qrcode, final CallbackSync cb){
 
-        url_garitas = context.getResources().getString(R.string.url_garitas);
+        url_garitas = context.getResources().getString(R.string.url_garitas)+"&id="+qrcode;
         REST = new RESTService(context);
 
-        REST.getJSONArray(url_garitas, new Response.Listener<JSONArray>() {
-            public void onResponse(JSONArray response) {
-                setGaritasToDatabase(response, cb);
+        REST.getJSONObject(url_garitas, new Response.Listener<JSONObject>() {
+            public void onResponse(JSONObject response) {
+                //setGaritasToDatabase(response, cb);
+                try {
+                    if(response.getString("ok").equals("1")){
+                        ContentValues values = new ContentValues();
+                        values.put(DbGaritasProjection.Entry.NOMBRE, response.getString("nombre"));
+                        cb.setValues(values);
+                        cb.success();
+                    } else {
+                        cb.error();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -314,6 +328,26 @@ public class SyncUtilities {
             }
         });
     }
+
+
+    /*public void validateGaritas(JSONArray data){
+        JSONObject item;
+        ContentValues values;
+
+        for(int n = 0; n < data.length(); n++){
+            try {
+                item = (JSONObject) data.get(n);
+                if(item.get)
+                values = new ContentValues();
+                values.put(DbGaritasProjection.Entry.ID, item.getString("id"));
+                values.put(DbGaritasProjection.Entry.NOMBRE, item.getString("nombre"));
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }*/
 
 
     /**
