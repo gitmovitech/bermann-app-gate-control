@@ -148,8 +148,36 @@ public class SyncUtilities {
         REST = new RESTService(context);
 
         REST.getJSONArray(url_choferes, new Response.Listener<JSONArray>() {
-            public void onResponse(JSONArray response) {
-                setChoferesToDatabase(response, cb);
+            public void onResponse(JSONArray data) {
+
+                JSONObject item;
+                ContentValues values;
+
+                DbChoferesHelper Choferes = new DbChoferesHelper(context);
+                Choferes.deleteAll();
+
+                for(int n = 0; n < data.length(); n++){
+                    try {
+                        item = (JSONObject) data.get(n);
+                        values = new ContentValues();
+                        values.put(DbChoferesProjection.Entry.NOMBRE, item.getString("nombre"));
+                        values.put(DbChoferesProjection.Entry.APELLIDO_PATERNO, item.getString("apellido_paterno"));
+                        values.put(DbChoferesProjection.Entry.RUT, item.getString("rut"));
+                        values.put(DbChoferesProjection.Entry.ESTADO, item.getString("estado"));
+                        values.put(DbChoferesProjection.Entry.FOTO, item.getString("foto_chofer"));
+                        Choferes.insert(values);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                config.edit().putString("LAST_SYNC_DATE",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())).commit();
+
+                Choferes.close();
+                cb.success();
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -194,19 +222,19 @@ public class SyncUtilities {
         Choferes.close();
 
         if(emitter == null) {
-            getChoferImages(new CallbackSync() {
+            /*getChoferImages(new CallbackSync() {
                 @Override
                 public void success() {
                     super.success();
                     Log.d("SYNC", "Imagenes sincronizadas en background");
                 }
-            });
+            });*/
         }
     }
 
 
 
-    public void getChoferImages(CallbackSync cb){
+    public void getChoferImagesEmitter(CallbackSync cb){
 
         ArrayList<String> ImageList = new ArrayList<>();
         DbChoferesHelper Choferes = new DbChoferesHelper(context);
@@ -297,7 +325,7 @@ public class SyncUtilities {
         Choferes.close();
 
         if(emitter == null) {
-            getChoferImages(cb);
+            //getChoferImages(cb);
         }
     }
 

@@ -32,25 +32,33 @@ public class InitActivity extends AppCompatActivity {
     private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 0x11;
     SyncUtilities sync_utilities;
     SharedPreferences config;
+    TextView syncing_imagenes;
+    TextView syncing_imagenes_progress;
+    AlertDialog.Builder alert;
+    CallbackSync emitter;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
 
-        //DbGaritasHelper Garitas = new DbGaritasHelper(getApplicationContext());
-        //Cursor cgaritas = Garitas.getAll();
+        config = getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
+        syncing_imagenes = (TextView) findViewById(R.id.txtSyncing);
+        syncing_imagenes_progress = (TextView) findViewById(R.id.syncing_imagenes_progress);
+        sync_utilities = new SyncUtilities(this);
+
+        alert = new AlertDialog.Builder(this);
+
+        intent = new Intent(this, QrScannerActivity.class);
+        intent.putExtras(getIntent().getExtras());
+
         DbChoferesHelper Choferes = new DbChoferesHelper(getApplicationContext());
-        Cursor cchoferes = Choferes.getAll();
+        Cursor c = Choferes.getAll();
 
-        startService(new Intent(getApplicationContext(), SyncEscaneos.class));
+        if(c.getCount() > 0){
 
-        if(/*cgaritas.getCount() > 0 && */cchoferes.getCount() > 0){
-
-            startActivity(new Intent(getApplicationContext(), QrScannerActivity.class).putExtras(getIntent().getExtras()));
-            //startService(new Intent(getApplicationContext(), SyncGaritas.class));
-            startService(new Intent(getApplicationContext(), SyncChoferes.class));
-
+            startActivity(intent);
             finish();
 
         } else {
@@ -61,16 +69,28 @@ public class InitActivity extends AppCompatActivity {
                 getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
             }
 
-            config = getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
             askForWriteExternalStorage();
 
         }
 
-        //cgaritas.close();
-        cchoferes.close();
-
-        //Garitas.close();
+        c.close();
         Choferes.close();
+
+        emitter = new CallbackSync(){
+            @Override
+            public void success() {
+                super.success();
+                if(getValues() != null) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ContentValues values = getValues();
+                            syncing_imagenes_progress.setText(values.get("completed") + " de "+values.get("total"));
+                        }
+                    });
+                }
+            }
+        };
 
     }
 
@@ -82,11 +102,16 @@ public class InitActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
         if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //SyncGaritas();
-                SyncChoferes();
+                SyncChoferes(new CallbackSync(){
+                    @Override
+                    public void success() {
+                        super.success();
+                        startActivity(intent);
+                        finish();
+                    }
+                });
             } else {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.perms_write_required), Toast.LENGTH_SHORT).show();
                 askForWriteExternalStorage();
@@ -94,124 +119,46 @@ public class InitActivity extends AppCompatActivity {
         }
     }
 
-
-    /**
-     * SINCRONIZACION DE GARITAS
-     */
-    /*protected void SyncGaritas(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                DbGaritasHelper Garitas = new DbGaritasHelper(getApplicationContext());
-                Cursor c = Garitas.getAll();
-                final Intent intent = new Intent(getApplicationContext(), SyncGaritas.class);
-                if(c.getCount() == 0){
-
-                    sync_utilities = new SyncUtilities(getApplicationContext());
-                    if(sync_utilities.detectInternet()){
-                        sync_utilities.getGaritasCallback(new CallbackSync(){
-                            @Override
-                            public void success() {
-                                startService(intent);
-                                SyncChoferes();
-                            }
-                        });
-                    } else {
-                        AlertDialog.Builder alert = new AlertDialog.Builder(getApplicationContext());
-                        alert.setTitle(getResources().getString(R.string.error));
-                        alert.setMessage(getResources().getString(R.string.connection_error_message));
-                        alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                                finish();
-                            }
-                        });
-                        alert.create();
-                        alert.show();
-                    }
-
-                } else {
-                    startService(intent);
-                }
-                c.close();
-                Garitas.close();
-            }
-        }).start();
-    }*/
-
-
     /**
      * SINCRONIZACION DE CHOFERES
+     * @param cb
      */
-    protected void SyncChoferes(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                DbChoferesHelper Choferes = new DbChoferesHelper(getApplicationContext());
-                Cursor c = Choferes.getAll();
-                final Intent intent = new Intent(getApplicationContext(), SyncChoferes.class);
-                if(c.getCount() == 0){
+    private void SyncChoferes(final CallbackSync cb){
 
-                    final TextView syncing_imagenes = (TextView) findViewById(R.id.txtSyncing);
-                    final TextView syncing_imagenes_progress = (TextView) findViewById(R.id.syncing_imagenes_progress);
-                    CallbackSync emitter = new CallbackSync(){
+        if(sync_utilities.detectInternet()){
+            sync_utilities.getChoferesCallback(new CallbackSync(){
+                @Override
+                public void success() {
+
+                    config.edit().putString("LAST_SYNC_DATE",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())).commit();
+
+                    syncing_imagenes.setText(getResources().getString(R.string.syncing_imagenes));
+
+                    /*sync_utilities.getChoferImagesEmitter(new CallbackSync(){
                         @Override
                         public void success() {
                             super.success();
-                            if(getValues() != null) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        ContentValues values = getValues();
-                                        syncing_imagenes_progress.setText(values.get("completed") + " de "+values.get("total"));
-                                    }
-                                });
-                            }
+
+                            config.edit().putString("LAST_SYNC_DATE",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())).commit();
+
+                            cb.success();
                         }
-                    };
-
-                    sync_utilities = new SyncUtilities(getApplicationContext(), emitter);
-                    if(sync_utilities.detectInternet()){
-                        sync_utilities.getChoferesCallback(new CallbackSync(){
-                            @Override
-                            public void success() {
-                                startService(intent);
-                                syncing_imagenes.setText(getResources().getString(R.string.syncing_imagenes));
-                                sync_utilities.getChoferImages(new CallbackSync(){
-                                    @Override
-                                    public void success() {
-                                        super.success();
-                                        config.edit().putString("LAST_SYNC_DATE",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())).commit();
-                                        startActivity(new Intent(getApplicationContext(), QrScannerActivity.class).putExtras(getIntent().getExtras()));
-                                        finish();
-                                    }
-                                });
-                            }
-                        });
-                    } else {
-                        AlertDialog.Builder alert = new AlertDialog.Builder(getApplicationContext());
-                        alert.setTitle(getResources().getString(R.string.error));
-                        alert.setMessage(getResources().getString(R.string.connection_error_message));
-                        alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                                finish();
-                            }
-                        });
-                        alert.create();
-                        alert.show();
-                    }
-
-                } else {
-                    startService(intent);
+                    }, emitter);*/
                 }
-                c.close();
-                Choferes.close();
-            }
-        }).start();
+            });
+        } else {
+            alert.setTitle(getResources().getString(R.string.error));
+            alert.setMessage(getResources().getString(R.string.connection_error_message));
+            alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                    finish();
+                }
+            });
+            alert.create();
+            alert.show();
+        }
     }
-
-
 
 
 }

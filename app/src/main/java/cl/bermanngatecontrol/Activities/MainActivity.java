@@ -24,6 +24,8 @@ import cl.bermanngatecontrol.Libraries.SyncUtilities;
 import cl.bermanngatecontrol.R;
 import cl.bermanngatecontrol.SQLite.DbGaritasHelper;
 import cl.bermanngatecontrol.SQLite.DbGaritasProjection;
+import cl.bermanngatecontrol.Services.SyncChoferes;
+import cl.bermanngatecontrol.Services.SyncEscaneos;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(this, InitActivity.class);
 
         config = getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
+
+        startService(new Intent(getApplicationContext(), SyncEscaneos.class));
+        startService(new Intent(getApplicationContext(), SyncChoferes.class));
 
         /**
          * COMPRUEBA INICIO DE SESION ANTERIOR
