@@ -303,38 +303,14 @@ public class SyncUtilities {
 
 
     /**
-     * OBTENER TODAS LAS GARITAS DESDE EL SERVICIO REST
-     */
-    public void getGaritas(){
-
-        url_garitas = context.getResources().getString(R.string.url_garitas);
-        REST = new RESTService(context);
-
-        REST.getJSONArray(url_garitas, new Response.Listener<JSONArray>() {
-            public void onResponse(JSONArray response) {
-                setChoferesToDatabase(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("ERROR", error.toString());
-            }
-        });
-    }
-
-
-    /**
      * OBTENER TODAS LAS GARITAS DESDE EL SERVICIO REST CON CALLBACK
      * @param cb
      */
     public void getGaritasCallback(String qrcode, final CallbackSync cb){
 
         url_garitas = context.getResources().getString(R.string.url_garitas)+"&id="+qrcode;
-        REST = new RESTService(context);
-
-        REST.getJSONObject(url_garitas, new Response.Listener<JSONObject>() {
+        new RESTService(context).getJSONObject(url_garitas, new Response.Listener<JSONObject>() {
             public void onResponse(JSONObject response) {
-                //setGaritasToDatabase(response, cb);
                 try {
                     if(response.getString("ok").equals("1")){
                         ContentValues values = new ContentValues();
@@ -355,67 +331,6 @@ public class SyncUtilities {
                 Log.e("ERROR", error.toString());
             }
         });
-    }
-
-
-    /*public void validateGaritas(JSONArray data){
-        JSONObject item;
-        ContentValues values;
-
-        for(int n = 0; n < data.length(); n++){
-            try {
-                item = (JSONObject) data.get(n);
-                if(item.get)
-                values = new ContentValues();
-                values.put(DbGaritasProjection.Entry.ID, item.getString("id"));
-                values.put(DbGaritasProjection.Entry.NOMBRE, item.getString("nombre"));
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }*/
-
-
-    /**
-     * GUARDA GARITAS EN LA BASE DE DATOS
-     * @param data
-     */
-    public void setGaritasToDatabase(JSONArray data){
-
-        JSONObject item;
-        ContentValues values;
-
-        DbGaritasHelper Garitas = new DbGaritasHelper(context);
-        Garitas.deleteAll();
-
-        for(int n = 0; n < data.length(); n++){
-            try {
-                item = (JSONObject) data.get(n);
-                values = new ContentValues();
-                values.put(DbGaritasProjection.Entry.ID, item.getString("id"));
-                values.put(DbGaritasProjection.Entry.NOMBRE, item.getString("nombre"));
-                values.put(DbGaritasProjection.Entry.CLIENTE, item.getString("cliente"));
-                Garitas.insert(values);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        Garitas.close();
-    }
-
-
-    /**
-     * GUARDA CHOFERES EN LA BASE DE DATOS CON CALLBACK
-     * @param data
-     * @param cb
-     */
-    public void setGaritasToDatabase(JSONArray data, CallbackSync cb){
-        setGaritasToDatabase(data);
-        cb.success();
     }
 
 
