@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //intent = new Intent(this, QrScannerActivity.class);
         intent = new Intent(this, InitActivity.class);
 
         config = getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);

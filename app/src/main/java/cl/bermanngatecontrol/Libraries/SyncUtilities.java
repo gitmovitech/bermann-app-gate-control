@@ -269,8 +269,36 @@ public class SyncUtilities {
      * @param cb
      */
     public void setChoferesToDatabase(JSONArray data, CallbackSync cb){
-        setChoferesToDatabase(data);
-        cb.success();
+        JSONObject item;
+        ContentValues values;
+
+        DbChoferesHelper Choferes = new DbChoferesHelper(context);
+        Choferes.deleteAll();
+
+        for(int n = 0; n < data.length(); n++){
+            try {
+                item = (JSONObject) data.get(n);
+                values = new ContentValues();
+                values.put(DbChoferesProjection.Entry.NOMBRE, item.getString("nombre"));
+                values.put(DbChoferesProjection.Entry.APELLIDO_PATERNO, item.getString("apellido_paterno"));
+                values.put(DbChoferesProjection.Entry.RUT, item.getString("rut"));
+                values.put(DbChoferesProjection.Entry.ESTADO, item.getString("estado"));
+                values.put(DbChoferesProjection.Entry.FOTO, item.getString("foto_chofer"));
+                Choferes.insert(values);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        config.edit().putString("LAST_SYNC_DATE",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())).commit();
+
+        Choferes.close();
+
+        if(emitter == null) {
+            getChoferImages(cb);
+        }
     }
 
 
