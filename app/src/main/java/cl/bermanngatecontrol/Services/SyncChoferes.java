@@ -1,5 +1,6 @@
 package cl.bermanngatecontrol.Services;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.ContentValues;
 import android.content.Context;
@@ -30,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import cl.bermanngatecontrol.Activities.InitActivity;
 import cl.bermanngatecontrol.Libraries.CallbackSync;
 import cl.bermanngatecontrol.Libraries.ImageDownload;
 import cl.bermanngatecontrol.Libraries.RESTService;
@@ -114,7 +116,9 @@ public class SyncChoferes extends Service {
                                         @Override
                                         public void success() {
                                             super.success();
-                                            Log.d("IMAGENES", "GUARDADAS");
+
+                                            //TODO NOTIFICAR AL ACTIVITY PARA PASAR A LA SIGUIENTE PAGINA
+
                                             config.edit().putString("LAST_SYNC_DATE", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())).commit();
                                         }
                                     });
@@ -149,26 +153,6 @@ public class SyncChoferes extends Service {
         thread.start();
 
 
-        /*
-
-        Sync.setNotificacion(new CallbackSync(){
-            @Override
-            public void success() {
-                super.success();
-
-                ContentValues values = getValues();
-                int completed = values.getAsInteger("completed");
-                int total = values.getAsInteger("total");
-                builder.setProgress(total, completed, false);
-                startForeground(1, builder.build());
-
-                if(completed == total){
-                    stopForeground(true);
-                }
-            }
-        });*/
-
-
     }
 
 
@@ -179,10 +163,14 @@ public class SyncChoferes extends Service {
                 @Override
                 public void success() {
                     super.success();
+                    builder.setContentText("Descargando imagen "+(n+1)+" de "+fotos.size());
+                    builder.setProgress(n+1, fotos.size(), false);
+                    startForeground(1, builder.build());
                     Download(fotos, n+1, cb);
                 }
             });
         } catch (Exception e){
+            stopForeground(true);
             cb.success();
         }
     }

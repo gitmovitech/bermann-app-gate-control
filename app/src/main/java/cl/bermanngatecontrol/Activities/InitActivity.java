@@ -105,6 +105,11 @@ public class InitActivity extends AppCompatActivity {
 
     }
 
+    public void goToNextPage(){
+        startActivity(intent);
+        finish();
+    }
+
     ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceDisconnected(ComponentName name) {
@@ -121,46 +126,6 @@ public class InitActivity extends AppCompatActivity {
         }
     };
 
-    /**
-     * SINCRONIZACION DE CHOFERES
-     * @param cb
-     */
-    private void SyncChoferes(final CallbackSync cb){
-
-        if(sync_utilities.detectInternet()){
-            sync_utilities.getChoferesCallback(new CallbackSync(){
-                @Override
-                public void success() {
-
-                    config.edit().putString("LAST_SYNC_DATE",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())).commit();
-
-                    syncing_imagenes.setText(getResources().getString(R.string.syncing_imagenes));
-
-                    /*sync_utilities.getChoferImagesEmitter(new CallbackSync(){
-                        @Override
-                        public void success() {
-                            super.success();
-
-                            config.edit().putString("LAST_SYNC_DATE",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())).commit();
-
-                            cb.success();
-                        }
-                    }, emitter);*/
-                }
-            });
-        } else {
-            alert.setTitle(getResources().getString(R.string.error));
-            alert.setMessage(getResources().getString(R.string.connection_error_message));
-            alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                    finish();
-                }
-            });
-            alert.create();
-            alert.show();
-        }
-    }
 
 
 }
