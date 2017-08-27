@@ -42,8 +42,12 @@ public class SyncEscaneos extends Service {
                     if (Processing == 0) {
                         Processing = 1;
                         if(sync_utilities.detectInternet()){
-                            sync_utilities.postEscaneos();
-                            Processing = 0;
+                            try {
+                                sync_utilities.postEscaneos();
+                                Processing = 0;
+                            } catch(Exception e){
+
+                            }
                         }
                     }
 

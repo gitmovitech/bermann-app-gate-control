@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     IntentIntegrator integrator;
     Intent intent;
     SharedPreferences config;
+    private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 0x11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
         config = getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
 
-        startService(new Intent(getApplicationContext(), SyncEscaneos.class));
-        startService(new Intent(getApplicationContext(), SyncChoferes.class));
+        startService(new Intent(this, SyncEscaneos.class));
+        startService(new Intent(this, SyncChoferes.class));
 
         /**
          * COMPRUEBA INICIO DE SESION ANTERIOR
@@ -73,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
                     integrator.initiateScan();
                 }
             });
+
+            askForWriteExternalStorage();
 
         }
 
@@ -154,6 +159,31 @@ public class MainActivity extends AppCompatActivity {
             });
             alert.create();
             alert.show();
+        }
+    }
+
+    protected void askForWriteExternalStorage(){
+        String[] permissions = {"android.permission.WRITE_EXTERNAL_STORAGE"};
+        ActivityCompat.requestPermissions(this, permissions, WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                /*SyncChoferes(new CallbackSync(){
+                    @Override
+                    public void success() {
+                        super.success();
+                        startActivity(intent);
+                        finish();
+                    }
+                });*/
+            } else {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.perms_write_required), Toast.LENGTH_SHORT).show();
+                askForWriteExternalStorage();
+            }
         }
     }
 

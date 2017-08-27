@@ -145,9 +145,7 @@ public class SyncUtilities {
      */
     public void getChoferesCallback(final CallbackSync cb){
         url_choferes = context.getResources().getString(R.string.url_choferes)+"&id="+config.getString("db_id", null);
-        REST = new RESTService(context);
-
-        REST.getJSONArray(url_choferes, new Response.Listener<JSONArray>() {
+        new RESTService(context).getJSONArray(url_choferes, new Response.Listener<JSONArray>() {
             public void onResponse(JSONArray data) {
 
                 JSONObject item;

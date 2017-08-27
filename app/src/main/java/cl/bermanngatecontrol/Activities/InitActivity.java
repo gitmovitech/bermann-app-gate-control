@@ -29,7 +29,6 @@ import cl.bermanngatecontrol.Services.SyncGaritas;
 
 public class InitActivity extends AppCompatActivity {
 
-    private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 0x11;
     SyncUtilities sync_utilities;
     SharedPreferences config;
     TextView syncing_imagenes;
@@ -69,7 +68,7 @@ public class InitActivity extends AppCompatActivity {
                 getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
             }
 
-            askForWriteExternalStorage();
+
 
         }
 
@@ -94,30 +93,6 @@ public class InitActivity extends AppCompatActivity {
 
     }
 
-    protected void askForWriteExternalStorage(){
-        String[] permissions = {"android.permission.WRITE_EXTERNAL_STORAGE"};
-        ActivityCompat.requestPermissions(this, permissions, WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                SyncChoferes(new CallbackSync(){
-                    @Override
-                    public void success() {
-                        super.success();
-                        startActivity(intent);
-                        finish();
-                    }
-                });
-            } else {
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.perms_write_required), Toast.LENGTH_SHORT).show();
-                askForWriteExternalStorage();
-            }
-        }
-    }
 
     /**
      * SINCRONIZACION DE CHOFERES

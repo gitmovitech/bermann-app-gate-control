@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -15,30 +16,59 @@ import cl.bermanngatecontrol.R;
 
 public class SyncChoferes extends Service {
 
-    Integer Processing = 0;
-
     NotificationCompat.Builder builder;
-    Context context;
-    SyncUtilities sync_utilities;
-    Integer timeSleep = 1000*60*60;
+    SyncUtilities Sync;
+    Integer timeSleep = 20000;
+    SharedPreferences config;
+    Thread thread;
 
     public SyncChoferes() {
+    }
+
+    public void WakeUp(){
+        thread.interrupt();
     }
 
     @Override
     public void onCreate() {
 
-        context = getApplicationContext();
-        sync_utilities = new SyncUtilities(context);
+        config = getApplicationContext().getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
+
+        thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                while (true){
+                    Log.d("EJECUTANDO SERVICIO", "SyncChoferes");
+                    if(!config.getString("db_id", "").isEmpty()){
+
+                    } else {
+                        try {
+                            thread.sleep(timeSleep);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+            }
+        });
+        thread.start();
 
 
-        builder = new NotificationCompat.Builder(getApplicationContext())
+        /*builder = new NotificationCompat.Builder(getApplicationContext())
                 .setSmallIcon(R.drawable.sync)
                 .setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.bermanngps))
                 .setContentTitle("Sincronizando")
-                .setContentText("Descargando imágenes");
+                .setContentText("Sincronizando choferes");
+        startForeground(1, builder.build());
 
-        sync_utilities.setNotificacion(new CallbackSync(){
+        Sync = new SyncUtilities(getApplicationContext());
+        Sync();
+
+
+
+        Sync.setNotificacion(new CallbackSync(){
             @Override
             public void success() {
                 super.success();
@@ -53,35 +83,31 @@ public class SyncChoferes extends Service {
                     stopForeground(true);
                 }
             }
-        });
+        });*/
 
 
-        new Thread(new Runnable(){
+        /*new Thread(new Runnable(){
             public void run() {
-                int m = 0;
                 while(true)
                 {
-
                     try {
                         Thread.sleep(timeSleep);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-
-                    if (Processing == 0) {
-                        Processing = 1;
-                        if(sync_utilities.detectInternet()){
-                            sync_utilities.getChoferes();
-                            Processing = 0;
-                        }
+                    if(Sync.detectInternet()){
+                        Sync.getChoferes();
                     }
-
 
                 }
 
             }
-        }).start();
+        }).start();*/
 
+    }
+
+    public void Sync(){
+        //Sync.getChoferesCallback();
     }
 
     @Override
