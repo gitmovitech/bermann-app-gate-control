@@ -60,7 +60,11 @@ public class InitActivity extends AppCompatActivity {
         intent.putExtras(getIntent().getExtras());
 
         Intent mIntent = new Intent(this, SyncChoferes.class);
-        bindService(mIntent, mConnection, BIND_AUTO_CREATE);
+        try {
+            bindService(mIntent, mConnection, BIND_AUTO_CREATE);
+        } catch (Exception e){
+
+        }
 
         DbChoferesHelper Choferes = new DbChoferesHelper(getApplicationContext());
         Cursor c = Choferes.getAll();
@@ -100,6 +104,22 @@ public class InitActivity extends AppCompatActivity {
         };
 
     }
+
+    ServiceConnection mConnection = new ServiceConnection() {
+
+        public void onServiceDisconnected(ComponentName name) {
+            mBounded = false;
+            SyncChoferes = null;
+        }
+
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBounded = true;
+            cl.bermanngatecontrol.Services.SyncChoferes.LocalBinder mLocalBinder = (cl.bermanngatecontrol.Services.SyncChoferes.LocalBinder)service;
+            SyncChoferes = mLocalBinder.getServerInstance();
+
+            SyncChoferes.WakeUp();
+        }
+    };
 
     /**
      * SINCRONIZACION DE CHOFERES
@@ -141,22 +161,6 @@ public class InitActivity extends AppCompatActivity {
             alert.show();
         }
     }
-
-    ServiceConnection mConnection = new ServiceConnection() {
-
-        public void onServiceDisconnected(ComponentName name) {
-            mBounded = false;
-            SyncChoferes = null;
-        }
-
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mBounded = true;
-            cl.bermanngatecontrol.Services.SyncChoferes.LocalBinder mLocalBinder = (cl.bermanngatecontrol.Services.SyncChoferes.LocalBinder)service;
-            SyncChoferes = mLocalBinder.getServerInstance();
-
-            SyncChoferes.WakeUp();
-        }
-    };
 
 
 }
