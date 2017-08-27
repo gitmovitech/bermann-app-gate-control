@@ -6,8 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import cl.bermanngatecontrol.Libraries.CallbackSync;
@@ -18,14 +24,16 @@ public class SyncChoferes extends Service {
 
     NotificationCompat.Builder builder;
     SyncUtilities Sync;
-    Integer timeSleep = 20000;
+    Integer timeSleep = 60000;
     SharedPreferences config;
     Thread thread;
+    IBinder mBinder = new LocalBinder();
 
     public SyncChoferes() {
     }
 
     public void WakeUp(){
+        Log.d("WAKE", "UP");
         thread.interrupt();
     }
 
@@ -39,9 +47,13 @@ public class SyncChoferes extends Service {
             public void run() {
 
                 while (true){
-                    Log.d("EJECUTANDO SERVICIO", "SyncChoferes");
                     if(!config.getString("db_id", "").isEmpty()){
-
+                        Log.d("EJECUTANDO SERVICIO", "No esta vacio");
+                        try {
+                            thread.sleep(timeSleep);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         try {
                             thread.sleep(timeSleep);
@@ -117,6 +129,14 @@ public class SyncChoferes extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return mBinder;
     }
+
+    public class LocalBinder extends Binder {
+        public SyncChoferes getServerInstance() {
+            return SyncChoferes.this;
+        }
+    }
+
+
 }

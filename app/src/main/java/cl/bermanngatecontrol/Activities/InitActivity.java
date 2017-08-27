@@ -1,13 +1,18 @@
 package cl.bermanngatecontrol.Activities;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
+import android.os.IBinder;
+import android.os.Messenger;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +41,8 @@ public class InitActivity extends AppCompatActivity {
     AlertDialog.Builder alert;
     CallbackSync emitter;
     Intent intent;
+    SyncChoferes SyncChoferes;
+    boolean mBounded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +59,9 @@ public class InitActivity extends AppCompatActivity {
         intent = new Intent(this, QrScannerActivity.class);
         intent.putExtras(getIntent().getExtras());
 
+        Intent mIntent = new Intent(this, SyncChoferes.class);
+        bindService(mIntent, mConnection, BIND_AUTO_CREATE);
+
         DbChoferesHelper Choferes = new DbChoferesHelper(getApplicationContext());
         Cursor c = Choferes.getAll();
 
@@ -67,8 +77,6 @@ public class InitActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
             }
-
-
 
         }
 
@@ -92,7 +100,6 @@ public class InitActivity extends AppCompatActivity {
         };
 
     }
-
 
     /**
      * SINCRONIZACION DE CHOFERES
@@ -134,6 +141,22 @@ public class InitActivity extends AppCompatActivity {
             alert.show();
         }
     }
+
+    ServiceConnection mConnection = new ServiceConnection() {
+
+        public void onServiceDisconnected(ComponentName name) {
+            mBounded = false;
+            SyncChoferes = null;
+        }
+
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBounded = true;
+            cl.bermanngatecontrol.Services.SyncChoferes.LocalBinder mLocalBinder = (cl.bermanngatecontrol.Services.SyncChoferes.LocalBinder)service;
+            SyncChoferes = mLocalBinder.getServerInstance();
+
+            SyncChoferes.WakeUp();
+        }
+    };
 
 
 }

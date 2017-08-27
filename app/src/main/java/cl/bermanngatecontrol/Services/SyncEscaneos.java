@@ -55,7 +55,7 @@ public class SyncEscaneos extends Service {
                 }
 
             }
-        }).start();
+        });
     }
 
     @Override
