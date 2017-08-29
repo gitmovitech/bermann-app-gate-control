@@ -86,6 +86,7 @@ public class SyncUtilities {
      */
     public void postEscaneos(){
         url_escaneos = context.getResources().getString(R.string.url_escaneos);
+        url_choferes += "&id="+config.getString("db_id", "");
         url_choferes += "&comentarios=TODO";
         url_escaneos += "&id_device=" + telephonyManager.getDeviceId();
         url_escaneos += "&garita="+config.getString(DbGaritasProjection.Entry.ID, "");

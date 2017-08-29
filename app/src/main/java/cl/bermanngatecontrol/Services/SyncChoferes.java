@@ -47,7 +47,7 @@ public class SyncChoferes extends Service {
 
     public static String BROADCAST_ACTION = "cl.bermanngatecontrol";
     NotificationCompat.Builder builder;
-    Integer timeSleep = 20000;
+    Integer timeSleep = 1000*60*60;
     SharedPreferences config;
     Thread thread;
     IBinder mBinder = new LocalBinder();
