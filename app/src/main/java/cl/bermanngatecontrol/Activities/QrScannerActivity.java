@@ -1,14 +1,17 @@
 package cl.bermanngatecontrol.Activities;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
+import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -39,6 +42,7 @@ import cl.bermanngatecontrol.SQLite.DbChoferesProjection;
 import cl.bermanngatecontrol.SQLite.DbEscaneosHelper;
 import cl.bermanngatecontrol.SQLite.DbEscaneosProjection;
 import cl.bermanngatecontrol.SQLite.DbGaritasProjection;
+import cl.bermanngatecontrol.Services.SyncChoferes;
 
 public class QrScannerActivity extends AppCompatActivity {
 
@@ -47,11 +51,16 @@ public class QrScannerActivity extends AppCompatActivity {
     String NombreGarita;
     SharedPreferences config;
     String uuid;
+    SyncChoferes SyncChoferes;
+    boolean mBounded;
+    Intent mIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr_scanner);
+
+        mIntent = new Intent(this, SyncChoferes.class);
 
         config = getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
 
@@ -64,7 +73,6 @@ public class QrScannerActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
 
 
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
@@ -206,6 +214,32 @@ public class QrScannerActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.sync:
+                /**
+                 * INTERRUMPIR PAUSA EN SERVICIO DE SINCRONIZACION
+                 */
+                ServiceConnection mConnection = new ServiceConnection() {
+
+                    public void onServiceDisconnected(ComponentName name) {
+                        mBounded = false;
+                        SyncChoferes = null;
+                    }
+
+                    public void onServiceConnected(ComponentName name, IBinder service) {
+                        mBounded = true;
+                        cl.bermanngatecontrol.Services.SyncChoferes.LocalBinder mLocalBinder = (cl.bermanngatecontrol.Services.SyncChoferes.LocalBinder)service;
+                        SyncChoferes = mLocalBinder.getServerInstance();
+
+                        SyncChoferes.WakeUp();
+                    }
+                };
+                try {
+                    bindService(mIntent, mConnection, BIND_IMPORTANT);
+                } catch (Exception e){
+
+                }
+                Toast.makeText(getApplicationContext(),R.string.start_sync,Toast.LENGTH_SHORT).show();
+                return true;
             case R.id.logout:
                 AlertDialog.Builder alert = new AlertDialog.Builder(QrScannerActivity.this);
                 alert.setTitle(getResources().getString(R.string.exit));
@@ -238,5 +272,6 @@ public class QrScannerActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
 }

@@ -41,7 +41,7 @@ public class InitActivity extends AppCompatActivity {
     TextView syncing_imagenes;
     TextView syncing_imagenes_progress;
     AlertDialog.Builder alert;
-    CallbackSync emitter;
+    //CallbackSync emitter;
     Intent intent;
     SyncChoferes SyncChoferes;
     boolean mBounded;
@@ -73,8 +73,7 @@ public class InitActivity extends AppCompatActivity {
 
         if(c.getCount() > 0){
 
-            startActivity(intent);
-            finish();
+            goToNextPage();
 
         } else {
 
@@ -93,7 +92,7 @@ public class InitActivity extends AppCompatActivity {
         registerReceiver(sync_choferes_finished, new IntentFilter(SyncChoferes.BROADCAST_ACTION));
 
 
-        emitter = new CallbackSync(){
+        /*emitter = new CallbackSync(){
             @Override
             public void success() {
                 super.success();
@@ -107,15 +106,14 @@ public class InitActivity extends AppCompatActivity {
                     });
                 }
             }
-        };
+        };*/
 
     }
 
     private BroadcastReceiver sync_choferes_finished = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent inte) {
-            startActivity(intent);
-            finish();
+            goToNextPage();
         }
     };
 

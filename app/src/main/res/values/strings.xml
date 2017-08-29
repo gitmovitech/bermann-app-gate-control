@@ -32,6 +32,7 @@
     <string name="error">Error</string>
     <string name="id_not_found">El número de documento no ha sido encontrado en la base de datos</string>
     <string name="garita_not_found">La Garita escaneada no existe</string>
+    <string name="start_sync">Sincronizando</string>
 
     <string name="qr_credencial_scan_message">Visualice el código QR de la credencial a través de esta cámara para iniciar el escaneo</string>
     <string name="qr_garita_scan_message">Visualice el código QR de la garita a través de esta cámara para iniciar el escaneo</string>
