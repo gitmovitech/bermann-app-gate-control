@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
@@ -44,6 +45,7 @@ import static java.lang.System.in;
 
 public class SyncChoferes extends Service {
 
+    public static String BROADCAST_ACTION = "cl.bermanngatecontrol";
     NotificationCompat.Builder builder;
     Integer timeSleep = 20000;
     SharedPreferences config;
@@ -117,7 +119,7 @@ public class SyncChoferes extends Service {
                                         public void success() {
                                             super.success();
 
-                                            //TODO NOTIFICAR AL ACTIVITY PARA PASAR A LA SIGUIENTE PAGINA
+                                            sendBroadcast(new Intent(BROADCAST_ACTION));
 
                                             config.edit().putString("LAST_SYNC_DATE", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())).commit();
                                         }

@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,6 +89,10 @@ public class InitActivity extends AppCompatActivity {
         c.close();
         Choferes.close();
 
+
+        registerReceiver(sync_choferes_finished, new IntentFilter(SyncChoferes.BROADCAST_ACTION));
+
+
         emitter = new CallbackSync(){
             @Override
             public void success() {
@@ -96,7 +102,7 @@ public class InitActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             ContentValues values = getValues();
-                            syncing_imagenes_progress.setText(values.get("completed") + " de "+values.get("total"));
+                            syncing_imagenes_progress.setText(values.get("completed") + " de " + values.get("total"));
                         }
                     });
                 }
@@ -105,11 +111,22 @@ public class InitActivity extends AppCompatActivity {
 
     }
 
+    private BroadcastReceiver sync_choferes_finished = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent inte) {
+            startActivity(intent);
+            finish();
+        }
+    };
+
     public void goToNextPage(){
         startActivity(intent);
         finish();
     }
 
+    /**
+     * INTERRUMPIR PAUSA EN SERVICIO DE SINCRONIZACION
+     */
     ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceDisconnected(ComponentName name) {
