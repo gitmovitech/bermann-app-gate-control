@@ -1,5 +1,5 @@
 <resources>
-    <string name="version">1.0.0</string>
+    <string name="version">1.0.1</string>
     <string name="app_name">App Gate Control</string>
     <string name="txt_scan_message">Escanear credencial</string>
     <string name="txt_scan_gate">Escanear garita</string>
@@ -30,7 +30,7 @@
     <string name="cancel">Cancelar</string>
     <string name="exit">Salir</string>
     <string name="error">Error</string>
-    <string name="id_not_found">El número de documento no ha sido encontrado en la base de datos</string>
+    <string name="id_not_found">Personal no autorizado</string>
     <string name="garita_not_found">La Garita escaneada no existe</string>
     <string name="start_sync">Sincronizando</string>
 

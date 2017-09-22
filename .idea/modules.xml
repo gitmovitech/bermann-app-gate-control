@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AppGateControl.iml" filepath="$PROJECT_DIR$/AppGateControl.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/appgatecontrol.iml" filepath="$PROJECT_DIR$/appgatecontrol.iml" />
     </modules>
   </component>
 </project>
