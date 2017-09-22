@@ -184,7 +184,8 @@ public class QrScannerActivity extends AppCompatActivity {
                     }.start();
 
                 } else {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                    intent.putExtra(DbChoferesProjection.Entry.ESTADO, "0");
+                    /*AlertDialog.Builder alert = new AlertDialog.Builder(this);
                     alert.setTitle(getResources().getString(R.string.error));
                     alert.setMessage(getResources().getString(R.string.id_not_found));
                     alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
@@ -193,10 +194,21 @@ public class QrScannerActivity extends AppCompatActivity {
                         }
                     });
                     alert.create();
-                    alert.show();
+                    alert.show();*/
                 }
                 c.close();
                 Choferes.close();
+
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            this.sleep(500);
+                        } catch (Exception e) {
+                        }
+                        startActivity(intent);
+                    }
+                }.start();
 
             }
         } else {
