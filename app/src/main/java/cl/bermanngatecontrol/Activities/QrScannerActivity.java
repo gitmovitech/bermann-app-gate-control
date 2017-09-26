@@ -171,18 +171,6 @@ public class QrScannerActivity extends AppCompatActivity {
                     Escaneos.insert(values);
                     Escaneos.close();
 
-
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            try {
-                                this.sleep(500);
-                            } catch (Exception e) {
-                            }
-                            startActivity(intent);
-                        }
-                    }.start();
-
                 } else {
                     intent.putExtra(DbChoferesProjection.Entry.ESTADO, "0");
                     /*AlertDialog.Builder alert = new AlertDialog.Builder(this);

@@ -87,6 +87,16 @@
 
             </LinearLayout>
 
+            <TextView
+                android:gravity="center"
+                android:textSize="23sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorAccent"
+                android:layout_below="@+id/foto_chofer"
+                android:text="ACCESO AUTORIZADO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
         </RelativeLayout>
 
         <LinearLayout
