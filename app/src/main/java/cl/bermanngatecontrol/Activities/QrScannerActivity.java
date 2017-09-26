@@ -60,6 +60,8 @@ public class QrScannerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr_scanner);
 
+        this.setTitle(this.getTitle()+" "+getResources().getString(R.string.version));
+
         mIntent = new Intent(this, SyncChoferes.class);
 
         config = getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
