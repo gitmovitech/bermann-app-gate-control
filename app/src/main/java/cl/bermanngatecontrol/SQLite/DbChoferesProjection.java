@@ -13,5 +13,7 @@ public class DbChoferesProjection {
         public static final String APELLIDO_PATERNO = "APELLIDO_PATERNO";
         public static final String ESTADO = "ESTADO";
         public static final String FOTO = "FOTO";
+        public static final String CELULAR = "CELULAR";
+        public static final String ID_GARITA = "ID_GARITA";
     }
 }

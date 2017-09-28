@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbChoferesHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = DbChoferesProjection.Entry.TABLE_NAME+".db";
 
     String[] projection = {
@@ -16,7 +16,9 @@ public class DbChoferesHelper extends SQLiteOpenHelper {
         DbChoferesProjection.Entry.NOMBRE,
         DbChoferesProjection.Entry.APELLIDO_PATERNO,
         DbChoferesProjection.Entry.ESTADO,
-        DbChoferesProjection.Entry.FOTO
+        DbChoferesProjection.Entry.FOTO,
+        DbChoferesProjection.Entry.CELULAR,
+        DbChoferesProjection.Entry.ID_GARITA
     };;
 
     public DbChoferesHelper(Context context) {
@@ -36,8 +38,11 @@ public class DbChoferesHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (newVersion > oldVersion) {
+            db.execSQL("ALTER TABLE "+DbChoferesProjection.Entry.TABLE_NAME+" ADD COLUMN "+DbChoferesProjection.Entry.CELULAR+" TEXT NULL");
+            db.execSQL("ALTER TABLE "+DbChoferesProjection.Entry.TABLE_NAME+" ADD COLUMN "+DbChoferesProjection.Entry.ID_GARITA+" TEXT NULL");
+        }
     }
 
     public void deleteAll(){
