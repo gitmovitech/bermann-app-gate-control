@@ -8,54 +8,27 @@
 
     <RelativeLayout
         android:id="@+id/rlColor"
-        android:background="@color/colorAprobado"
         android:layout_width="match_parent"
         android:gravity="center_vertical"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:visibility="gone"
-            android:id="@+id/stopImage"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/prevention_icon"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content" />
-
-
-        <TextView
-            android:id="@+id/txtRut"
-            android:textAlignment="center"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:textSize="40dp"
-            android:gravity="center"
-            android:text=""
+        <LinearLayout
+            android:visibility="gone" android:id="@+id/layout_rechazado"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_below="@+id/txtRut"
-            android:id="@+id/txtAcceso"
-            android:textAlignment="center"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:textColor="#FFFFFF"
-            android:textSize="40dp"
-            android:text="Acceso mensaje"
+            <include layout="@layout/acceso_rechazado"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone" android:id="@+id/layout_aprobado"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
 
-        <Button
-            android:visibility="gone"
-            android:id="@+id/btnDetalle"
-            style="@style/Base.Widget.AppCompat.Button.Colored"
-            android:background="@color/colorPrimary"
-            android:layout_margin="30dp"
-            android:text="Ver detalle del chofer"
-            android:layout_below="@+id/txtAcceso"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <include layout="@layout/acceso_aprobado"/>
 
+        </LinearLayout>
 
     </RelativeLayout>
 

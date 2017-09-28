@@ -7,8 +7,8 @@ android {
         applicationId "cl.bermanngatecontrol"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 101
-        versionName "1.0.1"
+        versionCode 102
+        versionName "1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -26,7 +26,7 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.mcxiaoke.volley:library:1.0.+'
+    compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.journeyapps:zxing-android-embedded:3.4.0'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:cardview-v7:25.3.1'

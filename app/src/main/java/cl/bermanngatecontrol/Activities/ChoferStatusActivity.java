@@ -8,11 +8,13 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,11 +37,12 @@ public class ChoferStatusActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_chofer_status);
+
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setElevation(0);
 
         /*intent = new Intent(this, ResultActivity.class);
         intent.putExtras(getIntent().getExtras());
@@ -52,13 +55,17 @@ public class ChoferStatusActivity extends AppCompatActivity {
         });*/
 
 
+        LinearLayout layout_aprobado = (LinearLayout) findViewById(R.id.layout_aprobado);
+        LinearLayout layout_rechazado = (LinearLayout) findViewById(R.id.layout_rechazado);
+        layout_aprobado.setVisibility(View.GONE);
+        layout_rechazado.setVisibility(View.GONE);
+
         String Estado = getIntent().getStringExtra(DbChoferesProjection.Entry.ESTADO);
         int Color = 0;
 
         if(Estado.equals("1")){
-
-            setContentView(R.layout.activity_result);
-
+            layout_aprobado.setVisibility(View.VISIBLE);
+            Color = R.color.colorAprobado;
             final ImageButton foto_chofer = (ImageButton) findViewById(R.id.foto_chofer);
             TextView txtRut = (TextView) findViewById(R.id.txtRut);
             TextView txtNombres = (TextView) findViewById(R.id.txtNombres);
@@ -84,7 +91,7 @@ public class ChoferStatusActivity extends AppCompatActivity {
             txtRut.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.RUT));
             txtNombres.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.NOMBRE));
             txtApellidos.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.APELLIDO_PATERNO));
-
+/*
 
             ListView Registros = (ListView) findViewById(R.id.ListViewRegistros);
             ArrayList<ModelEscaneos> ArrayEscaneos = new ArrayList<>();
@@ -103,31 +110,20 @@ public class ChoferStatusActivity extends AppCompatActivity {
             Escaneos.close();
             AdapterEscaneos Listado = new AdapterEscaneos(this, ArrayEscaneos, getIntent());
             Registros.setAdapter(Listado);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
-            }
+*/
 
         } else {
 
-            setContentView(R.layout.activity_chofer_status);
-
-            TextView txtAcceso = (TextView) findViewById(R.id.txtAcceso);
-            Button btnDetalle = (Button) findViewById(R.id.btnDetalle);
-            ImageView stopImage = (ImageView) findViewById(R.id.stopImage);
-
+            layout_rechazado.setVisibility(View.VISIBLE);
             Color = R.color.colorRechazado;
-            txtAcceso.setText(getResources().getString(R.string.id_not_found));
-            btnDetalle.setVisibility(View.GONE);
-            stopImage.setVisibility(View.VISIBLE);
 
-            RelativeLayout rlColor = (RelativeLayout) findViewById(R.id.rlColor);
-            rlColor.setBackgroundColor(getResources().getColor(Color));
+        }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setNavigationBarColor(getResources().getColor(Color));
-            }
+        RelativeLayout rlColor = (RelativeLayout) findViewById(R.id.rlColor);
+        rlColor.setBackgroundColor(getResources().getColor(Color));
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(getResources().getColor(Color));
         }
 
 
