@@ -12,9 +12,9 @@ public class CallbackSync{
         return values;
     }
     public void success(){
-        Log.d("CALLBACK", "SUCCESS");
+        //Log.d("CALLBACK", "SUCCESS");
     }
     public void error(){
-        Log.e("CALLBACK", "ERROR");
+        //Log.e("CALLBACK", "ERROR");
     }
 }

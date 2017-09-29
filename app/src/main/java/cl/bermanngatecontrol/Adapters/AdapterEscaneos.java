@@ -3,6 +3,7 @@ package cl.bermanngatecontrol.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,7 +81,7 @@ public class AdapterEscaneos extends BaseAdapter {
             e.printStackTrace();
         }
 
-
+        garita.setVisibility(View.GONE); //OCULTA NOMBRE, NOSE SI SE USARÀ
         garita.setText(nombre_garita);
         acceso.setText(estado);
 
