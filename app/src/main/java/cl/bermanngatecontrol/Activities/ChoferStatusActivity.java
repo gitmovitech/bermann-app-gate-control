@@ -49,15 +49,16 @@ public class ChoferStatusActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        /*intent = new Intent(this, ResultActivity.class);
-        intent.putExtras(getIntent().getExtras());
 
+        Button btnDetalle = (Button) findViewById(R.id.btnDetalle);
         btnDetalle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
+                intent.putExtras(getIntent().getExtras());
                 startActivity(intent);
             }
-        });*/
+        });
 
 
         LinearLayout layout_aprobado = (LinearLayout) findViewById(R.id.layout_aprobado);
@@ -100,26 +101,6 @@ public class ChoferStatusActivity extends AppCompatActivity {
             txtNombres.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.NOMBRE));
             txtApellidos.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.APELLIDO_PATERNO));
             txtCelular.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.CELULAR));
-/*
-
-            ListView Registros = (ListView) findViewById(R.id.ListViewRegistros);
-            ArrayList<ModelEscaneos> ArrayEscaneos = new ArrayList<>();
-
-            DbEscaneosHelper Escaneos = new DbEscaneosHelper(getApplicationContext());
-            Cursor c = Escaneos.getAll();
-            while(c.moveToNext()){
-                ArrayEscaneos.add(new ModelEscaneos(
-                        c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.FECHA)),
-                        c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.HORA)),
-                        c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.GARITA)),
-                        c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.ESTADO))
-                ));
-            }
-            c.close();
-            Escaneos.close();
-            AdapterEscaneos Listado = new AdapterEscaneos(this, ArrayEscaneos, getIntent());
-            Registros.setAdapter(Listado);
-*/
 
         } else {
 

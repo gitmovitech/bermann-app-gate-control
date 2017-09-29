@@ -25,8 +25,6 @@ import cl.bermanngatecontrol.SQLite.DbEscaneosProjection;
 
 public class ResultActivity extends AppCompatActivity {
 
-    Boolean isImageFitToScreen = true;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,33 +38,6 @@ public class ResultActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setElevation(0);
-
-        final ImageButton foto_chofer = (ImageButton) findViewById(R.id.foto_chofer);
-        TextView txtRut = (TextView) findViewById(R.id.txtRut);
-        TextView txtNombres = (TextView) findViewById(R.id.txtNombres);
-        TextView txtApellidos = (TextView) findViewById(R.id.txtApellidos);
-
-        String foto = getIntent().getStringExtra(DbChoferesProjection.Entry.FOTO);
-        if(!foto.isEmpty()) {
-            ContextWrapper c = new ContextWrapper(this);
-            String filesdir = c.getFilesDir() + "/";
-            File imagen = new File(filesdir+foto);
-            if(imagen.exists()) {
-                Bitmap bitmap = BitmapFactory.decodeFile(imagen.getAbsolutePath());
-                foto_chofer.setImageBitmap(bitmap);
-                foto_chofer.setAdjustViewBounds(true);
-                foto_chofer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                });
-            }
-        }
-        txtRut.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.RUT));
-        txtNombres.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.NOMBRE));
-        txtApellidos.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.APELLIDO_PATERNO));
-
 
         ListView Registros = (ListView) findViewById(R.id.ListViewRegistros);
         ArrayList<ModelEscaneos> ArrayEscaneos = new ArrayList<>();
