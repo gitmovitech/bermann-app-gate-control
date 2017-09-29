@@ -100,6 +100,8 @@ public class SyncChoferes extends Service {
                                             Values.put(DbChoferesProjection.Entry.APELLIDO_PATERNO, item.getString("apellido_paterno"));
                                             Values.put(DbChoferesProjection.Entry.ESTADO, item.getString("estado"));
                                             Values.put(DbChoferesProjection.Entry.RUT, item.getString("rut"));
+                                            Values.put(DbChoferesProjection.Entry.CELULAR, item.getString("celular"));
+                                            Values.put(DbChoferesProjection.Entry.ID_GARITA, item.getString("id_garita"));
                                             foto = item.getString("foto_chofer").split("/");
                                             Values.put(DbChoferesProjection.Entry.FOTO, foto[foto.length-1]);
                                             Choferes.insert(Values);

@@ -1,7 +1,9 @@
 package cl.bermanngatecontrol.Activities;
 
+import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,19 +32,25 @@ import cl.bermanngatecontrol.R;
 import cl.bermanngatecontrol.SQLite.DbChoferesProjection;
 import cl.bermanngatecontrol.SQLite.DbEscaneosHelper;
 import cl.bermanngatecontrol.SQLite.DbEscaneosProjection;
+import cl.bermanngatecontrol.SQLite.DbGaritasProjection;
 
 import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 import static android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
 
 public class ChoferStatusActivity extends AppCompatActivity {
 
-    //Intent intent;
+    SharedPreferences config;
+    String CurrentIdGarita;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_chofer_status);
+
+        config = getSharedPreferences("AppGateControl", Context.MODE_PRIVATE);
+        CurrentIdGarita = config.getString(DbGaritasProjection.Entry.ID,"");
+
 
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
 
@@ -60,7 +68,6 @@ public class ChoferStatusActivity extends AppCompatActivity {
             }
         });
 
-
         LinearLayout layout_aprobado = (LinearLayout) findViewById(R.id.layout_aprobado);
         LinearLayout layout_rechazado = (LinearLayout) findViewById(R.id.layout_rechazado);
         layout_aprobado.setVisibility(View.GONE);
@@ -70,37 +77,58 @@ public class ChoferStatusActivity extends AppCompatActivity {
         int Color = 0;
 
         if(Estado.equals("1")){
-            layout_aprobado.setVisibility(View.VISIBLE);
-            Color = R.color.colorAprobado;
-            final ImageButton foto_chofer = (ImageButton) findViewById(R.id.foto_chofer);
-            TextView txtRut = (TextView) findViewById(R.id.txtRut);
-            TextView txtNombres = (TextView) findViewById(R.id.txtNombres);
-            TextView txtApellidos = (TextView) findViewById(R.id.txtApellidos);
-            TextView txtCelular = (TextView) findViewById(R.id.txtCelular);
 
-            String foto = getIntent().getStringExtra(DbChoferesProjection.Entry.FOTO);
-            if(!foto.isEmpty()) {
-                ContextWrapper c = new ContextWrapper(this);
-                String filesdir = c.getFilesDir() + "/";
-                final File imagen = new File(filesdir+foto);
-                if(imagen.exists()) {
-                    Bitmap bitmap = BitmapFactory.decodeFile(imagen.getAbsolutePath());
-                    foto_chofer.setImageBitmap(bitmap);
-                    foto_chofer.setAdjustViewBounds(true);
-                    foto_chofer.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getApplicationContext(), ImageDetail.class);
-                            intent.putExtra("imagepath", imagen.getAbsolutePath());
-                            startActivity(intent);
-                        }
-                    });
+            String garita = getIntent().getStringExtra(DbChoferesProjection.Entry.ID_GARITA);
+            garita = garita.replace("{","");
+            garita = garita.replace("}","");
+            String[] garitas = garita.split(",");
+            boolean acceso = false;
+            for(int n = 0; n < garitas.length; n++){
+                if(CurrentIdGarita.equals(garitas[n])){
+                    acceso = true;
+                    break;
                 }
             }
-            txtRut.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.RUT));
-            txtNombres.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.NOMBRE));
-            txtApellidos.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.APELLIDO_PATERNO));
-            txtCelular.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.CELULAR));
+
+            if(acceso) {
+                layout_aprobado.setVisibility(View.VISIBLE);
+                Color = R.color.colorAprobado;
+                final ImageButton foto_chofer = (ImageButton) findViewById(R.id.foto_chofer);
+                TextView txtRut = (TextView) findViewById(R.id.txtRut);
+                TextView txtNombres = (TextView) findViewById(R.id.txtNombres);
+                TextView txtApellidos = (TextView) findViewById(R.id.txtApellidos);
+                TextView txtCelular = (TextView) findViewById(R.id.txtCelular);
+
+                String foto = getIntent().getStringExtra(DbChoferesProjection.Entry.FOTO);
+                if (!foto.isEmpty()) {
+                    ContextWrapper c = new ContextWrapper(this);
+                    String filesdir = c.getFilesDir() + "/";
+                    final File imagen = new File(filesdir + foto);
+                    if (imagen.exists()) {
+                        Bitmap bitmap = BitmapFactory.decodeFile(imagen.getAbsolutePath());
+                        foto_chofer.setImageBitmap(bitmap);
+                        foto_chofer.setAdjustViewBounds(true);
+                        foto_chofer.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getApplicationContext(), ImageDetail.class);
+                                intent.putExtra("imagepath", imagen.getAbsolutePath());
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                }
+                txtRut.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.RUT));
+                txtNombres.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.NOMBRE));
+                txtApellidos.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.APELLIDO_PATERNO));
+                txtCelular.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.CELULAR));
+
+            } else {
+
+                layout_rechazado.setVisibility(View.VISIBLE);
+                Color = R.color.colorRechazado;
+
+            }
 
         } else {
 

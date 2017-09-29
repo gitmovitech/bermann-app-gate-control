@@ -33,6 +33,8 @@ public class DbChoferesHelper extends SQLiteOpenHelper {
         query += DbChoferesProjection.Entry.NOMBRE+" TEXT NOT NULL,";
         query += DbChoferesProjection.Entry.APELLIDO_PATERNO+" TEXT NOT NULL,";
         query += DbChoferesProjection.Entry.ESTADO+" TEXT NOT NULL,";
+        query += DbChoferesProjection.Entry.CELULAR+" TEXT NULL,";
+        query += DbChoferesProjection.Entry.ID_GARITA+" TEXT NULL,";
         query += DbChoferesProjection.Entry.FOTO+" TEXT NULL)";
         db.execSQL(query);
     }
