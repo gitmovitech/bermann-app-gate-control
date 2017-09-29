@@ -156,6 +156,8 @@ public class QrScannerActivity extends AppCompatActivity {
                     intent.putExtra(DbChoferesProjection.Entry.RUT, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.RUT)));
                     intent.putExtra(DbChoferesProjection.Entry.ESTADO, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.ESTADO)));
                     intent.putExtra(DbChoferesProjection.Entry.FOTO, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.FOTO)));
+                    intent.putExtra(DbChoferesProjection.Entry.CELULAR, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.CELULAR)));
+                    intent.putExtra(DbChoferesProjection.Entry.ID_GARITA, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.ID_GARITA)));
 
 
                     DbEscaneosHelper Escaneos = new DbEscaneosHelper(getApplicationContext());
@@ -175,16 +177,6 @@ public class QrScannerActivity extends AppCompatActivity {
 
                 } else {
                     intent.putExtra(DbChoferesProjection.Entry.ESTADO, "0");
-                    /*AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                    alert.setTitle(getResources().getString(R.string.error));
-                    alert.setMessage(getResources().getString(R.string.id_not_found));
-                    alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    alert.create();
-                    alert.show();*/
                 }
                 c.close();
                 Choferes.close();

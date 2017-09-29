@@ -5,29 +5,40 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
-        android:largeHeap="true"
         android:allowBackup="true"
         android:icon="@drawable/bermanngps"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@drawable/bermanngps"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.MainActivity" android:screenOrientation="portrait">
+        <activity
+            android:name=".Activities.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.QrScannerActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.ResultActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.ChoferStatusActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.InitActivity" android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.QrScannerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.ResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.ChoferStatusActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.InitActivity"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".Services.BroadcastBootService"
@@ -51,6 +62,8 @@
             android:enabled="true"
             android:exported="true" />
 
+        <activity android:name=".Activities.ImageDetail"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

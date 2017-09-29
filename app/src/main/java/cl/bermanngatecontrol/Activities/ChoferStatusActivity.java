@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -28,6 +30,9 @@ import cl.bermanngatecontrol.R;
 import cl.bermanngatecontrol.SQLite.DbChoferesProjection;
 import cl.bermanngatecontrol.SQLite.DbEscaneosHelper;
 import cl.bermanngatecontrol.SQLite.DbEscaneosProjection;
+
+import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
+import static android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
 
 public class ChoferStatusActivity extends AppCompatActivity {
 
@@ -70,12 +75,13 @@ public class ChoferStatusActivity extends AppCompatActivity {
             TextView txtRut = (TextView) findViewById(R.id.txtRut);
             TextView txtNombres = (TextView) findViewById(R.id.txtNombres);
             TextView txtApellidos = (TextView) findViewById(R.id.txtApellidos);
+            TextView txtCelular = (TextView) findViewById(R.id.txtCelular);
 
             String foto = getIntent().getStringExtra(DbChoferesProjection.Entry.FOTO);
             if(!foto.isEmpty()) {
                 ContextWrapper c = new ContextWrapper(this);
                 String filesdir = c.getFilesDir() + "/";
-                File imagen = new File(filesdir+foto);
+                final File imagen = new File(filesdir+foto);
                 if(imagen.exists()) {
                     Bitmap bitmap = BitmapFactory.decodeFile(imagen.getAbsolutePath());
                     foto_chofer.setImageBitmap(bitmap);
@@ -83,7 +89,9 @@ public class ChoferStatusActivity extends AppCompatActivity {
                     foto_chofer.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            Intent intent = new Intent(getApplicationContext(), ImageDetail.class);
+                            intent.putExtra("imagepath", imagen.getAbsolutePath());
+                            startActivity(intent);
                         }
                     });
                 }
@@ -91,6 +99,7 @@ public class ChoferStatusActivity extends AppCompatActivity {
             txtRut.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.RUT));
             txtNombres.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.NOMBRE));
             txtApellidos.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.APELLIDO_PATERNO));
+            txtCelular.setText(getIntent().getStringExtra(DbChoferesProjection.Entry.CELULAR));
 /*
 
             ListView Registros = (ListView) findViewById(R.id.ListViewRegistros);
