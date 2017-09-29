@@ -14,7 +14,7 @@ public class SyncEscaneos extends Service {
 
     Context context;
     SyncUtilities sync_utilities;
-    Integer timeSleep = 5000;
+    Integer timeSleep = 1000*60*60;
 
     public SyncEscaneos() {
     }
