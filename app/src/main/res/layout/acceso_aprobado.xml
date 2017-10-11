@@ -45,6 +45,7 @@
 
                 <!-- NOMBRES CHOFER -->
                 <TextView
+                    android:textSize="22sp"
                     android:text="@string/txt_firstname"
                     android:layout_width="match_parent"
                     android:textStyle="bold"
@@ -57,7 +58,7 @@
 
                     <TextView
                         android:id="@+id/txtNombres"
-                        android:textSize="18sp"
+                        android:textSize="22sp"
                         android:textStyle="bold"
                         android:text="Víctor Andrés"
                         android:layout_width="wrap_content"
@@ -68,7 +69,7 @@
                         android:layout_marginLeft="5dp"
                         android:id="@+id/txtApellidos"
                         android:textStyle="bold"
-                        android:textSize="18sp"
+                        android:textSize="22sp"
                         android:text="Vargas Oyarzo"
                         android:textColor="#FFF"
                         android:layout_width="match_parent"
@@ -86,6 +87,7 @@
                     <TextView
                         android:text="@string/txt_cid"
                         android:textStyle="bold"
+                        android:textSize="22sp"
                         android:textColor="@color/colorPrimaryDark"
                         android:layout_width="160dp"
                         android:layout_height="wrap_content" />
@@ -94,6 +96,7 @@
                     <TextView
                         android:text="@string/txt_celular"
                         android:layout_width="match_parent"
+                        android:textSize="22sp"
                         android:textStyle="bold"
                         android:textColor="@color/colorPrimaryDark"
                         android:layout_height="wrap_content" />
@@ -118,7 +121,7 @@
                     <TextView
                         android:id="@+id/txtCelular"
                         android:textStyle="bold"
-                        android:textSize="18sp"
+                        android:textSize="22sp"
                         android:text="987654321"
                         android:textColor="#FFF"
                         android:layout_width="match_parent"
