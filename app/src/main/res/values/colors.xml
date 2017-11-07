@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#0B845C</color>
-    <color name="colorPrimaryDark">#0B845C</color>
-    <color name="colorAccent">#FFE60A</color>
-    <color name="colorAprobado">#64dd17</color>
-    <color name="colorRechazado">#ff7043</color>
+    <color name="colorPrimary">#E0643A</color>
+    <color name="colorPrimaryDark">#E0643A</color>
+    <color name="colorAccent">#E0643A</color>
+    <color name="colorAprobado">#E0643A</color>
+    <color name="colorRechazado">#E0643A</color>
 </resources>
