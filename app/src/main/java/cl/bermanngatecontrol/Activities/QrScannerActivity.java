@@ -144,7 +144,7 @@ public class QrScannerActivity extends AppCompatActivity {
             if(result.getContents() == null) {
                 Toast.makeText(this, getResources().getString(R.string.qr_scan_cancel), Toast.LENGTH_LONG).show();
             } else {
-                String qrcode = result.getContents();
+                String qrcode = result.getContents().trim();
 
                 DbChoferesHelper Choferes = new DbChoferesHelper(getApplicationContext());
                 Cursor c = Choferes.getByRut(qrcode);
