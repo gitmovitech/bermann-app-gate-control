@@ -54,6 +54,7 @@ public class ChoferStatusActivity extends AppCompatActivity {
 
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
 
+        getSupportActionBar().show();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -92,7 +93,8 @@ public class ChoferStatusActivity extends AppCompatActivity {
 
             if(acceso) {
                 layout_aprobado.setVisibility(View.VISIBLE);
-                Color = R.color.colorAprobado;
+                getSupportActionBar().hide();
+                Color = R.color.colorAprobadoVerde;
                 final ImageButton foto_chofer = (ImageButton) findViewById(R.id.foto_chofer);
                 TextView txtRut = (TextView) findViewById(R.id.txtRut);
                 TextView txtNombres = (TextView) findViewById(R.id.txtNombres);

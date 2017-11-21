@@ -5,4 +5,6 @@
     <color name="colorAccent">#E0643A</color>
     <color name="colorAprobado">#E0643A</color>
     <color name="colorRechazado">#E0643A</color>
+    <color name="colorAprobadoVerde">#00FF00</color>
+    <color name="colorAprobadoVerdeOscuro">#00AA00</color>
 </resources>
