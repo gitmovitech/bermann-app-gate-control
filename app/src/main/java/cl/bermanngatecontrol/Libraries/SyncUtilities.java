@@ -1,6 +1,7 @@
 package cl.bermanngatecontrol.Libraries;
 
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -84,6 +85,7 @@ public class SyncUtilities {
     /**
      * ENVIA REGISTROS ESCANEADOS AL SERVIDOR
      */
+    @SuppressLint("MissingPermission")
     public void postEscaneos(){
         url_escaneos = context.getResources().getString(R.string.url_escaneos);
         url_choferes += "&id="+config.getString("db_id", "");

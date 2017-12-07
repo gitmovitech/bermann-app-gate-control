@@ -60,7 +60,7 @@ public class QrScannerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr_scanner);
 
-        this.setTitle(this.getTitle()+" "+getResources().getString(R.string.version));
+        this.setTitle(this.getTitle() + " " + getResources().getString(R.string.version));
 
         mIntent = new Intent(this, SyncChoferes.class);
 
@@ -71,7 +71,7 @@ public class QrScannerActivity extends AppCompatActivity {
         Date dateFormat;
         try {
             dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(config.getString("LAST_SYNC_DATE", ""));
-            last_sync_date.setText("Ultima sincronización: "+new SimpleDateFormat("EEEE").format(dateFormat) +" "+ dateFormat.toLocaleString());
+            last_sync_date.setText("Ultima sincronización: " + new SimpleDateFormat("EEEE").format(dateFormat) + " " + dateFormat.toLocaleString());
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -85,7 +85,7 @@ public class QrScannerActivity extends AppCompatActivity {
         }
 
 
-        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
         }
@@ -108,8 +108,11 @@ public class QrScannerActivity extends AppCompatActivity {
         });
     }
 
-    public void phoneStatePerms(){
-        TelephonyManager tManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+    public void phoneStatePerms() {
+        TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
         uuid = tManager.getDeviceId();
         SyncUtilities sync_utilities = new SyncUtilities(this);
         String url_set_mobile_device = getResources().getString(R.string.url_set_mobile_device);
