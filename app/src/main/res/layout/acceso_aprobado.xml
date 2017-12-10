@@ -38,7 +38,7 @@
                     android:textStyle="bold"
                     android:textColor="#FFF"
                     android:layout_below="@+id/foto_chofer"
-                    android:text="ACCESO AUTORIZADO"
+                    android:text="@string/acceso_aprobado"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

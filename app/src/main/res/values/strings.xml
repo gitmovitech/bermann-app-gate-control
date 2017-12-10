@@ -1,7 +1,8 @@
 <resources>
     <string name="version">1.0.7</string>
     <string name="app_name">App Gate Control</string>
-    <string name="txt_scan_message">Escanear credencial</string>
+    <string name="txt_scan_message">Escanear credencial de Entrada</string>
+    <string name="txt_scan_message_out">Escanear credencial de Salida</string>
     <string name="txt_scan_gate">Escanear garita</string>
     <string name="txt_cid">RUT</string>
     <string name="txt_firstname">Nombres</string>
@@ -42,8 +43,8 @@
 
     <string name="loading">Cargando, por favor espere...</string>
 
-    <string name="acceso_aprobado">Acceso aprobado</string>
-    <string name="acceso_rechazado">Acceso rechazado</string>
+    <string name="acceso_aprobado">AUTORIZADO</string>
+    <string name="acceso_rechazado">PERSONAL NO AUTORIZADO</string>
 
     <string name="perms_write_required">El permiso de escritura para guardar las fotografías es requerido</string>
 

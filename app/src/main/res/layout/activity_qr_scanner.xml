@@ -37,6 +37,22 @@
             android:text="@string/txt_scan_message"
             android:textSize="13dip" />
 
+        <Button
+            android:layout_marginTop="10dp"
+            android:id="@+id/btnQrScanOut"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@color/colorPrimary"
+            android:drawableLeft="@drawable/qrcode_scan"
+            android:drawablePadding="2dip"
+            android:gravity="center"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:text="@string/txt_scan_message_out"
+            android:textSize="13dip" />
+
         <TextView
             android:paddingTop="10dp"
             android:id="@+id/last_sync_date"

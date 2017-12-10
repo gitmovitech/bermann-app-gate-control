@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbEscaneosHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = DbEscaneosProjection.Entry.TABLE_NAME+".db";
 
     String[] projection = {
@@ -19,6 +19,7 @@ public class DbEscaneosHelper extends SQLiteOpenHelper {
         DbEscaneosProjection.Entry.ESTADO,
         DbEscaneosProjection.Entry.SYNC,
         DbEscaneosProjection.Entry.CLIENTE,
+        DbEscaneosProjection.Entry.ENTRADA,
         DbEscaneosProjection.Entry.ORDEN
     };;
 
@@ -36,14 +37,17 @@ public class DbEscaneosHelper extends SQLiteOpenHelper {
         query += DbEscaneosProjection.Entry.RUT+" TEXT NOT NULL,";
         query += DbEscaneosProjection.Entry.ESTADO+" TEXT NOT NULL,";
         query += DbEscaneosProjection.Entry.SYNC+" TEXT NOT NULL,";
+        query += DbEscaneosProjection.Entry.ENTRADA+" TEXT NOT NULL,";
         query += DbEscaneosProjection.Entry.ORDEN+" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,";
         query += DbEscaneosProjection.Entry.CLIENTE+" TEXT NOT NULL)";
         db.execSQL(query);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (newVersion > oldVersion) {
+            db.execSQL("ALTER TABLE "+DbEscaneosProjection.Entry.TABLE_NAME+" ADD COLUMN "+DbEscaneosProjection.Entry.ENTRADA+" TEXT NULL");
+        }
     }
 
     public void setSync(int id){

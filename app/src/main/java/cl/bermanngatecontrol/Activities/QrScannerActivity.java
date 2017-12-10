@@ -54,6 +54,7 @@ public class QrScannerActivity extends AppCompatActivity {
     SyncChoferes SyncChoferes;
     boolean mBounded;
     Intent mIntent;
+    Boolean ScanIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +103,17 @@ public class QrScannerActivity extends AppCompatActivity {
         btnQrScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ScanIn = true;
+                integrator.setPrompt(getResources().getString(R.string.qr_credencial_scan_message));
+                integrator.initiateScan();
+            }
+        });
+
+        Button btnQrScanOut = (Button) findViewById(R.id.btnQrScanOut);
+        btnQrScanOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ScanIn = false;
                 integrator.setPrompt(getResources().getString(R.string.qr_credencial_scan_message));
                 integrator.initiateScan();
             }
@@ -166,6 +178,7 @@ public class QrScannerActivity extends AppCompatActivity {
                     DbEscaneosHelper Escaneos = new DbEscaneosHelper(getApplicationContext());
                     ContentValues values = new ContentValues();
                     values.put(DbEscaneosProjection.Entry.CLIENTE, config.getString(DbGaritasProjection.Entry.CLIENTE,""));
+                    values.put(DbEscaneosProjection.Entry.ENTRADA, ScanIn);
                     values.put(DbEscaneosProjection.Entry.ESTADO, c.getString(c.getColumnIndexOrThrow(DbChoferesProjection.Entry.ESTADO)));
                     values.put(DbEscaneosProjection.Entry.SYNC, "0");
                     values.put(DbEscaneosProjection.Entry.GARITA, config.getString(DbGaritasProjection.Entry.ID,""));
