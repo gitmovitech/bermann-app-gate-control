@@ -110,6 +110,11 @@ public class SyncUtilities {
             } else {
                 url_escaneos += "&estado_chofer=FALSE";
             }
+            if(c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.ENTRADA)).equals("1")){
+                url_escaneos += "&en_sa=TRUE";
+            } else {
+                url_escaneos += "&en_sa=FALSE";
+            }
             url_escaneos += "&fecha_envio=" + c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.FECHA));
             url_escaneos += "&hora_envio=" + c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.HORA));
 

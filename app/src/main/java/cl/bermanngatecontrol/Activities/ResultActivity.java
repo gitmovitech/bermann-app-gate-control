@@ -48,7 +48,7 @@ public class ResultActivity extends AppCompatActivity {
             ArrayEscaneos.add(new ModelEscaneos(
                     c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.FECHA)),
                     c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.HORA)),
-                    c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.GARITA)),
+                    c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.ENTRADA)),
                     c.getString(c.getColumnIndexOrThrow(DbEscaneosProjection.Entry.ESTADO))
             ));
         }

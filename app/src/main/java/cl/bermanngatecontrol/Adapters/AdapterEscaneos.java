@@ -60,9 +60,9 @@ public class AdapterEscaneos extends BaseAdapter {
         TextView acceso = (TextView) layoutitem.findViewById(R.id.acceso);
         TextView fecha = (TextView) layoutitem.findViewById(R.id.fecha);
 
-        String estado = "Acceso Aprobado";
+        String estado = "Autorizado";
         if(!escaneos.get(position).ESTADO.equals("1")){
-            estado = "Acceso Rechazado";
+            estado = "No Autorizado";
         }
 
         /*DbGaritasHelper Garitas = new DbGaritasHelper(context);
@@ -72,6 +72,11 @@ public class AdapterEscaneos extends BaseAdapter {
         c.close();
         Garitas.close();*/
         String nombre_garita = intent.getStringExtra(DbGaritasProjection.Entry.NOMBRE);
+        if(escaneos.get(position).GARITA.equals("1")){
+            nombre_garita = "Entrada";
+        } else {
+            nombre_garita = "Salida";
+        }
 
         Date dateFormat;
         try {
@@ -81,7 +86,7 @@ public class AdapterEscaneos extends BaseAdapter {
             e.printStackTrace();
         }
 
-        garita.setVisibility(View.GONE); //OCULTA NOMBRE, NOSE SI SE USARÀ
+        garita.setVisibility(View.VISIBLE); //OCULTA NOMBRE, NOSE SI SE USARÀ
         garita.setText(nombre_garita);
         acceso.setText(estado);
 
